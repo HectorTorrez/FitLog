@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import { useAuthProvider } from "../../hook/useAuthProvider"
+import { Navbar } from "../Navbar/Navbar"
+import { WorkoutLog } from "../WorkoutLog/WorkoutLog"
 
 export const Home = () => {
 
@@ -15,14 +17,8 @@ export const Home = () => {
   return (
 
     <>
-
-      <div>Wecolme, {user?.displayName || user?.email}</div>
-
-      <button onClick={handleLogout}>
-        Logout
-      </button>
-
-
+      <Navbar />
+      <WorkoutLog />
     </>
   )
 }
