@@ -1,112 +1,61 @@
 import { useState } from "react"
 import { ExerciseForm } from "../ExerciseForm/ExerciseForm"
 
-export const WorkoutForm = ({ onAddWorkout }) => {
-  const [isWorkoutCreate, setIsWorkoutCreate] = useState(false)
-  const [workouts, setWorkouts] = useState([{
-    muscleDay: "",
-    id: new Date().getTime(),
-    exercises: {
-      name: "",
-      day: new Date().toLocaleDateString(),
-      sets: "",
-      reps: "",
-      weight: "",
+export const WorkoutForm = () => {
+
+  const [muscle, setMuscle] = useState([])
+  const [muscleInput, setMuscleInput] = useState('')
+  const [showExerciseForm, setShowExerciseForm] = useState(false)
+  const [alert, setAlert] = useState(false)
+
+  const handleDown = (event) => {
+    if (event.key === 'Enter') {
+      handleSubmit()
     }
-  }])
-
-
-
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    if (workouts.muscleDay === "") return
-    // const newWorkout = {
-    //   id: new Date().getTime(),
-    //   exercise: workouts.exercise,
-    //   day: new Date().toLocaleDateString(),
-    //   sets: workouts.sets,
-    //   reps: workouts.reps,
-    //   weight: workouts.weight,
-
-
-    // }
-    // if (workouts.id === newWorkout.id) return
-    // setWorkouts([...workouts, newWorkout])
-
-    const newMuscle = (workouts)
-    onAddWorkout(newMuscle)
-    // onAddWorkout({
-    //   muscleDay: "",
-    //   exercises: {
-    //     name: "",
-    //     day: new Date().toLocaleDateString(),
-    //     sets: "",
-    //     reps: "",
-    //     weight: "",
-    //   }
-    // })
-
-    setIsWorkoutCreate(true)
-    setMuscle("")
   }
 
-
-  const handleDelete = (id) => {
-    const newWorkout = workouts.filter(workout => workout.id !== id)
-    setWorkouts(newWorkout)
+  const handleClear = () => {
+    setMuscle([])
+    setShowExerciseForm(false)
   }
 
-  const handleDeleteAll = () => {
-    setWorkouts([])
-  }
-
-  const handleChange = (e) => {
-    setWorkouts([{
-      ...workouts,
-      [e.target.name]: e.target.value
-    }])
+  const handleSubmit = () => {
+    if (muscleInput === '') return
+    if (muscle.includes(muscleInput)) {
+      setAlert(true)
+      return
+    }
+    setMuscle([...muscle, muscleInput])
+    setShowExerciseForm(true)
+    setMuscleInput('')
+    setAlert(false)
   }
 
   return (
-    <div>
-      <label htmlFor="exercise">Muscle: </label>
-      <input type="muscle" name="muscle" value={workouts.muscleDay} onChange={handleChange} />
-      <button onClick={handleSubmit}>Create</button>
-      <button onClick={handleDeleteAll}>
-        Delete All
+    <section className="max-w-md mx-auto">
+
+      {
+        alert && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-5">
+          <p className="text-red-500">Muscle already exists</p>
+        </div>
+      }
+      <label className="block text-gray-700 font-bold mb-2" htmlFor="">Muscle</label>
+      <input className=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Add Muscle" type="text" name="muscle" value={muscleInput} onChange={(event) => setMuscleInput(event.target.value)} onKeyDown={handleDown} />
+
+      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onClick={handleSubmit}>
+        Add Muscle
       </button>
-      {/* {
-        workouts?.map((workout) => (
-          < section key={workout.id} >
-            <div>
-              <h2>{workout.muscle}</h2>
-            </div>
-            <div key={workout.id}>
-              <label htmlFor="exercise">Exercise: </label>
-              <input type="exercise" name="exercise" id="exercise" value={workout.exercises.name} onChange={handleChange} />
-              <label htmlFor="sets">Sets: </label>
-              <input type="sets" name="sets" id="sets" value={workout.exercises.sets} onChange={handleChange} />
-              <label htmlFor="reps">Reps: </label>
-              <input type="reps" name="reps" id="reps" value={workout.exercises.reps} onChange={handleChange} />
-              <label htmlFor="weight">Weight: </label>
-              <input type="weight" name="weight" id="weight" value={workout.exercises.weight} onChange={handleChange} />
-              <button onClick={() => handleDelete(workout.id)}>Delete</button>
-            </div>
-          </section >
-        ))
-      } */}
 
+      <button className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onClick={handleClear}>
+        Clear
+      </button>
 
+      {
+        showExerciseForm &&
+        <ExerciseForm muscle={muscle} />
 
+      }
 
-      {/* <div>
-        {
-          isWorkoutCreate &&
-          <ExerciseForm workouts={workouts} />
-
-        }
-      </div> */}
-    </div >
+    </section>
   )
 }
