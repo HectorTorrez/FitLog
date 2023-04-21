@@ -1,12 +1,37 @@
 import { useEffect, useState } from "react";
+import { Exercise } from "../Exercise/Exercise";
 
-export const ExerciseForm = ({ muscles, onAddMuscle }) => {
-  const [exercise, setExercise] = useState("");
-  const [isEdit, setIsEdit] = useState(true);
+export const ExerciseForm = ({ muscle }) => {
+  console.log(muscle.exercises);
+
+  const [isEdit, setIsEdit] = useState(false);
+
+  const handleEdit = (id) => {
+    const isId = muscle.exercises.find((mus) => mus.id === id);
+    console.log(isId);
+    if (isId.id) {
+      setIsEdit(true);
+    } else {
+      setIsEdit(false);
+    }
+  };
+  const handleAdd = () => {
+    setIsEdit(false);
+  };
 
   return (
     <>
-      <section className="bg-slate-100  shadow-md rounded px-1 pt-1 pb-1 mb-4">
+      <Exercise
+        muscle={muscle}
+        isEdit={isEdit}
+        handleEdit={handleEdit}
+        handleAdd={handleAdd}
+      />
+    </>
+  );
+};
+{
+  /* <section className="bg-slate-100  shadow-md rounded px-1 pt-1 pb-1 mb-4">
         <>
           <div>
             <button>Add Exercise</button>
@@ -43,8 +68,8 @@ export const ExerciseForm = ({ muscles, onAddMuscle }) => {
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   type="number"
                   name="sets"
-                  // value={sets}
-                  // onChange={handleChange}
+                  value={sets}
+                  onChange={(event) => setSets(event.target.value)}
                 />
               ) : (
                 <span>{sets}</span>
@@ -61,8 +86,8 @@ export const ExerciseForm = ({ muscles, onAddMuscle }) => {
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   type="number"
                   name="reps"
-                  // value={reps}
-                  // onChange={handleChange}
+                  value={reps}
+                  onChange={(event) => setReps(event.target.value)}
                 />
               ) : (
                 <span>{reps}</span>
@@ -79,8 +104,8 @@ export const ExerciseForm = ({ muscles, onAddMuscle }) => {
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   type="number"
                   name="weight"
-                  // value={weight}
-                  // onChange={handleChange}
+                  value={weight}
+                  onChange={(event) => setWeight(event.target.value)}
                 />
               ) : (
                 <span>{weight}</span>
@@ -93,7 +118,5 @@ export const ExerciseForm = ({ muscles, onAddMuscle }) => {
             </div>
           </div>
         </>
-      </section>
-    </>
-  );
-};
+      </section> */
+}

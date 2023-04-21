@@ -1,83 +1,62 @@
 import { useEffect, useState } from "react";
 import { ExerciseForm } from "../ExerciseForm/ExerciseForm";
+import { ExerciseCard } from "../ExerciseCard/ExerciseCard";
 
-const initialExercises = [
-  {
-    id: new Date().getTime(),
-    muscle: "",
-    exercises: [
-      {
-        id: new Date().getTime() * 5,
-        sets: "",
-        reps: "",
-        weight: "",
-      },
-    ],
-  },
-];
+const initialExercises = [];
 
 export const WorkoutForm = () => {
-  const [muscles, setMuscles] = useState(initialExercises);
+  const [muscles, setMuscles] = useState(() => [
+    {
+      id: new Date().getTime(),
+      muscle: "Test 1",
+      exercises: [
+        {
+          id: new Date().getTime() * 100,
+          sets: "2 ",
+          weight: "30 ",
+          reps: "300",
+        },
+        {
+          id: new Date().getTime() * 10,
+          sets: "5 ",
+          weight: "20 ",
+          reps: "4 ",
+        },
+      ],
+    },
+    {
+      id: new Date().getTime() * 200,
+      muscle: "Test 2",
+      exercises: [
+        {
+          id: new Date().getTime() + 10,
+          reps: "3 ",
+          sets: "2 ",
+          weight: "30 ",
+        },
+        {
+          id: new Date().getTime(),
+          reps: "4 ",
+          sets: "5 ",
+          weight: "20",
+        },
+      ],
+    },
+  ]);
+
   const [muscleInput, setMuscleInput] = useState("");
-  const [showExerciseForm, setShowExerciseForm] = useState(false);
-  const [alert, setAlert] = useState(false);
-
-  console.log(muscles);
-
-  const handleDown = (event) => {
-    if (event.key === "Enter") {
-      handleClick();
-    }
-  };
-
-  const handleAddMuscle = (muscle) => {
-    setMuscles([
-      ...muscles,
-      {
-        id: new Date().getTime(),
-        muscle: muscle,
-        exercises: [
-          {
-            id: new Date().getTime() * 5,
-            sets: "add here",
-            reps: "add here",
-            weight: "add here",
-          },
-        ],
-      },
-    ]);
-
-    setShowExerciseForm(true);
-  };
-
-  const handleClick = () => {
-    setMuscleInput("");
-    handleAddMuscle(muscleInput);
-  };
-
-  const handleChangeMuscle = (nextMuscle) => {
-    setMuscles(
-      muscles.map((muscle) => {
-        if (muscle.id === nextMuscle.id) {
-          return nextMuscle;
-        } else {
-          return muscle;
-        }
-      })
-    );
-  };
 
   return (
-    <section className="max-w-md mx-auto">
-      {alert && (
+    <section className="max-w-md  my-10 mx-2 flex flex-col gap-3 text-center">
+      {/* {alert && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-5">
           <p className="text-red-500">Muscle already exists</p>
         </div>
-      )}
+      )} */}
 
-      <label className="block text-gray-700 font-bold mb-2" htmlFor="">
-        Muscle
-      </label>
+      <h1 className="text-2xl text-gray-700 font-bold mb-2" htmlFor="">
+        WorkoutLog
+      </h1>
       <input
         className=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         placeholder="Add Muscle"
@@ -85,33 +64,24 @@ export const WorkoutForm = () => {
         name="muscle"
         value={muscleInput}
         onChange={(event) => setMuscleInput(event.target.value)}
-        onKeyDown={handleDown}
+        // onKeyDown={handleDown}
       />
 
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-        onClick={handleClick}
+        // onClick={handleClick}
       >
         Add Muscle
       </button>
 
-      <button className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+      <button
+        // onClick={handleClearMuscle}
+        className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+      >
         Clear
       </button>
 
-      {showExerciseForm &&
-        muscles.map((muscle) => (
-          <section key={muscle.id}>
-            <h2>{muscle.muscle}</h2>
-
-            <ExerciseForm
-              muscles={muscles}
-              onChange={handleChangeMuscle}
-              onAddMuscle={handleAddMuscle}
-            />
-          </section>
-        ))}
-      {/* {showExerciseForm && <ExerciseForm muscle={muscle} />} */}
+      <ExerciseCard muscles={muscles} />
     </section>
   );
 };
