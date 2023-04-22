@@ -1,58 +1,73 @@
-export const Exercise = ({ muscle, isEdit, handleEdit, handleAdd }) => {
-  return (
-    <>
-      {muscle.exercises.map((data) => (
-        <section
-          className=" flex items-center gap-2 w-full  text-start mb-3"
-          key={data.id}
-        >
-          {isEdit ? (
-            <input
-              className="w-16 shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              type="text"
-              name="exercise"
-              value={data.sets}
-            />
-          ) : (
-            <span>Sets: {data.sets}</span>
-          )}
-          {isEdit ? (
-            <input
-              className=" w-16 shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              type="text"
-              name="exercise"
-              value={data.weight}
-            />
-          ) : (
-            <span>Weight: {data.weight} lbs</span>
-          )}
-          {isEdit ? (
-            <input
-              className=" w-16 shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              type="text"
-              name="exercise"
-              value={data.reps}
-            />
-          ) : (
-            <span>Reps: {data.reps}</span>
-          )}
+import { Fragment, useState } from "react";
+import { useMuscleContext } from "../../hooks/useMuscleContext";
 
-          <div className=" flex gap-2 justify-end w-full">
-            <button
-              onClick={handleAdd}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-1 rounded focus:outline-none focus:shadow-outline"
-            >
-              Add
-            </button>
-            <button
-              onClick={() => handleEdit(data.id)}
-              className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            >
-              Edit
-            </button>
-          </div>
-        </section>
-      ))}
-    </>
+export const Exercise = ({ exercise, onDeleteMuscle }) => {
+  const [isEditing, setIsEditing] = useState(false);
+
+  const { handleDeleteExercise } = useMuscleContext();
+
+  let todoContent;
+  if (isEditing) {
+    todoContent = (
+      <>
+        <input
+          className="w-16 shadow appearance-none border rounded py-2 px-3
+        text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          type="text"
+          name={exercise.id}
+          value={exercise.sets}
+        ></input>
+
+        <input
+          className="w-16 shadow appearance-none border rounded py-2 px-3
+        text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          type="text"
+          name="exercise"
+          value={exercise.reps}
+        ></input>
+
+        <input
+          className="w-16 shadow appearance-none border rounded py-2 px-3
+        text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          type="text"
+          name={exercise.id}
+          value={exercise.weight}
+        ></input>
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          onClick={() => setIsEditing(false)}
+        >
+          Save
+        </button>
+      </>
+    );
+  } else {
+    todoContent = (
+      <section className="flex gap-3 items-center">
+        <p>Sets: {exercise.sets}</p>
+        <p>Reps: {exercise.reps}</p>
+        <p>Weight: {exercise.weight}</p>
+        <button
+          className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
+          onClick={() => setIsEditing(true)}
+        >
+          Edit
+        </button>
+      </section>
+    );
+  }
+
+  return (
+    <div>
+      <label htmlFor="" className="flex gap-2 justify-center m-5 items-center">
+        {todoContent}
+        <button
+          onClick={() => handleDeleteExercise(exercise.id)}
+          className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+        >
+          Delete
+        </button>
+      </label>
+    </div>
   );
 };

@@ -1,32 +1,12 @@
 import { useEffect, useState } from "react";
 import { Exercise } from "../Exercise/Exercise";
 
-export const ExerciseForm = ({ muscle }) => {
-  console.log(muscle.exercises);
-
-  const [isEdit, setIsEdit] = useState(false);
-
-  const handleEdit = (id) => {
-    const isId = muscle.exercises.find((mus) => mus.id === id);
-    console.log(isId);
-    if (isId.id) {
-      setIsEdit(true);
-    } else {
-      setIsEdit(false);
-    }
-  };
-  const handleAdd = () => {
-    setIsEdit(false);
-  };
-
+export const ExerciseForm = ({ exercises }) => {
   return (
     <>
-      <Exercise
-        muscle={muscle}
-        isEdit={isEdit}
-        handleEdit={handleEdit}
-        handleAdd={handleAdd}
-      />
+      {exercises.map((mus) => (
+        <Exercise key={mus.id} exercise={mus} />
+      ))}
     </>
   );
 };
