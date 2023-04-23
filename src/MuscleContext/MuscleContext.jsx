@@ -12,12 +12,14 @@ export const MuscleProvider = ({ children }) => {
       exercises: [
         {
           id: new Date().getTime() * 100,
+          exercise: "test",
           sets: "2 ",
           weight: "300 ",
           reps: "10",
         },
         {
           id: new Date().getTime() * 10,
+          exercise: "test",
           sets: "5 ",
           weight: "200",
           reps: "4 ",
@@ -30,12 +32,14 @@ export const MuscleProvider = ({ children }) => {
       exercises: [
         {
           id: new Date().getTime() + 10,
+          exercise: "test",
           reps: "3 ",
           sets: "2 ",
           weight: "300 ",
         },
         {
           id: new Date().getTime(),
+          exercise: "test",
           reps: "4 ",
           sets: "5 ",
           weight: "200",
@@ -44,13 +48,44 @@ export const MuscleProvider = ({ children }) => {
     },
   ]);
 
+  console.log(muscles);
+
+  function handleAddMuscle(muscle) {
+    setMuscles([
+      ...muscles,
+      {
+        id: new Date().getTime(),
+        muscle,
+        exercises: [
+          {
+            id: new Date().getTime() * 100,
+            exercise: "test",
+            sets: "2 ",
+            weight: "300 ",
+            reps: "10",
+          },
+        ],
+      },
+    ]);
+  }
+
+  function handleClearMuscle() {
+    setMuscles([]);
+  }
+
   function handleDeleteExercise(id) {
     setMuscles(muscles.filter((m) => m.id !== id));
   }
 
   return (
     <MuscleContext.Provider
-      value={{ muscles, setMuscles, handleDeleteExercise }}
+      value={{
+        muscles,
+        setMuscles,
+        handleDeleteExercise,
+        handleAddMuscle,
+        handleClearMuscle,
+      }}
     >
       {children}
     </MuscleContext.Provider>

@@ -1,7 +1,15 @@
 import { useState } from "react";
+import { useMuscleContext } from "../../hooks/useMuscleContext";
 
 export const AddMuscle = () => {
   const [muscleInput, setMuscleInput] = useState("");
+
+  const { handleAddMuscle, handleClearMuscle } = useMuscleContext();
+
+  function handleClick() {
+    handleAddMuscle(muscleInput);
+    setMuscleInput("");
+  }
 
   return (
     <section className="max-w-md  my-10 mx-2 flex flex-col gap-3 text-center">
@@ -26,13 +34,13 @@ export const AddMuscle = () => {
 
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-        // onClick={handleClick}
+        onClick={handleClick}
       >
         Add Muscle
       </button>
 
       <button
-        // onClick={handleClearMuscle}
+        onClick={handleClearMuscle}
         className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
       >
         Clear

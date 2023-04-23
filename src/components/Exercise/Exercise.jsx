@@ -15,6 +15,13 @@ export const Exercise = ({ exercise, onDeleteMuscle }) => {
         text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           type="text"
           name={exercise.id}
+          value={exercise.exercise}
+        ></input>
+        <input
+          className="w-16 shadow appearance-none border rounded py-2 px-3
+        text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          type="text"
+          name={exercise.id}
           value={exercise.sets}
         ></input>
 
@@ -44,6 +51,7 @@ export const Exercise = ({ exercise, onDeleteMuscle }) => {
   } else {
     todoContent = (
       <section className="flex gap-3 items-center">
+        <p>Sets: {exercise.exercise}</p>
         <p>Sets: {exercise.sets}</p>
         <p>Reps: {exercise.reps}</p>
         <p>Weight: {exercise.weight}</p>

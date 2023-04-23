@@ -14,7 +14,6 @@ export const ExerciseCard = () => {
           <button onClick={() => handleDeleteExercise(muscle.id)}>
             DELETE
           </button>
-
           <h2 className="text-2xl">{muscle.muscle}</h2>
           <ExerciseForm exercises={muscle.exercises} />
         </section>
