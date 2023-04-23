@@ -1,5 +1,11 @@
 import { Fragment, useState } from "react";
 import { useMuscleContext } from "../../hooks/useMuscleContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faFloppyDisk,
+  faPenToSquare,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 
 export const Exercise = ({ exercise, onDeleteMuscle }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -9,7 +15,14 @@ export const Exercise = ({ exercise, onDeleteMuscle }) => {
   let todoContent;
   if (isEditing) {
     todoContent = (
-      <>
+      <section className="flex gap-2">
+        <button
+          className=" text-blue-500 font-bold py-1 px-1 rounded focus:outline-none focus:shadow-outline "
+          onClick={() => setIsEditing(false)}
+        >
+          <FontAwesomeIcon icon={faFloppyDisk} />
+        </button>
+
         <input
           className="w-16 shadow appearance-none border rounded py-2 px-3
         text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -29,7 +42,7 @@ export const Exercise = ({ exercise, onDeleteMuscle }) => {
           className="w-16 shadow appearance-none border rounded py-2 px-3
         text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           type="text"
-          name="exercise"
+          name={exercise.id}
           value={exercise.reps}
         ></input>
 
@@ -41,25 +54,32 @@ export const Exercise = ({ exercise, onDeleteMuscle }) => {
           value={exercise.weight}
         ></input>
         <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          onClick={() => setIsEditing(false)}
+          onClick={() => handleDeleteExercise(exercise.id)}
+          className=" text-red-500 font-bold py-1 px-1 rounded"
         >
-          Save
+          <FontAwesomeIcon icon={faTrash} />
         </button>
-      </>
+      </section>
     );
   } else {
     todoContent = (
-      <section className="flex gap-3 items-center">
-        <p>Sets: {exercise.exercise}</p>
+      <section className="flex gap-3 items-center  justify-center justify-items-stretch">
+        <button
+          className="text-yellow-600 font-bold py-1 px-1 rounded   "
+          onClick={() => setIsEditing(true)}
+        >
+          <FontAwesomeIcon icon={faPenToSquare} />
+        </button>
+
+        <p>Exercise: {exercise.exercise}</p>
         <p>Sets: {exercise.sets}</p>
         <p>Reps: {exercise.reps}</p>
         <p>Weight: {exercise.weight}</p>
         <button
-          className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
-          onClick={() => setIsEditing(true)}
+          onClick={() => handleDeleteExercise(exercise.id)}
+          className=" text-red-500 font-bold py-1 px-1 rounded"
         >
-          Edit
+          <FontAwesomeIcon icon={faTrash} />
         </button>
       </section>
     );
@@ -67,14 +87,11 @@ export const Exercise = ({ exercise, onDeleteMuscle }) => {
 
   return (
     <div>
-      <label htmlFor="" className="flex gap-2 justify-center m-5 items-center">
+      <label
+        htmlFor=""
+        className="flex flex-col  gap-2 justify-center m-5 items-center"
+      >
         {todoContent}
-        <button
-          onClick={() => handleDeleteExercise(exercise.id)}
-          className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-        >
-          Delete
-        </button>
       </label>
     </div>
   );

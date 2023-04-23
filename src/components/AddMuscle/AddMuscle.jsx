@@ -6,6 +6,13 @@ export const AddMuscle = () => {
 
   const { handleAddMuscle, handleClearMuscle } = useMuscleContext();
 
+  const handleDown = (event) => {
+    if (event.key === "Enter") {
+      handleAddMuscle(muscleInput);
+      setMuscleInput("");
+    }
+  };
+
   function handleClick() {
     handleAddMuscle(muscleInput);
     setMuscleInput("");
@@ -29,7 +36,7 @@ export const AddMuscle = () => {
         name="muscle"
         value={muscleInput}
         onChange={(event) => setMuscleInput(event.target.value)}
-        // onKeyDown={handleDown}
+        onKeyDown={handleDown}
       />
 
       <button

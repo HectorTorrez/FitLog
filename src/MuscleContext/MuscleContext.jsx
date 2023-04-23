@@ -4,6 +4,7 @@ export const MuscleContext = createContext();
 
 export const MuscleProvider = ({ children }) => {
   const [toggle, setToggle] = useState(true);
+  const [isMuscle, setIsMuscle] = useState(false);
 
   const [muscles, setMuscles] = useState(() => [
     {
@@ -48,9 +49,8 @@ export const MuscleProvider = ({ children }) => {
     },
   ]);
 
-  console.log(muscles);
-
   function handleAddMuscle(muscle) {
+    if (!muscle) return;
     setMuscles([
       ...muscles,
       {
@@ -59,22 +59,54 @@ export const MuscleProvider = ({ children }) => {
         exercises: [
           {
             id: new Date().getTime() * 100,
-            exercise: "test",
-            sets: "2 ",
-            weight: "300 ",
-            reps: "10",
+            exercise: "",
+            sets: "",
+            weight: "",
+            reps: "",
           },
         ],
       },
     ]);
   }
 
+  function handleToggleMuscle(id) {
+    setToggle(!toggle);
+  }
+
   function handleClearMuscle() {
     setMuscles([]);
   }
 
-  function handleDeleteExercise(id) {
+  function handleDeleteMuscle(id) {
+    const confirmDelete = confirm(
+      "Are you sure you want to delete this muscle group?"
+    );
+    if (!confirmDelete) return;
     setMuscles(muscles.filter((m) => m.id !== id));
+  }
+
+  function handleAddExercise(muscleId) {
+    const confirmAdd = confirm("Are you sure you want to add an exercise?");
+    if (!confirmAdd) return;
+    setMuscles(
+      muscles.map((m) =>
+        m.id === muscleId
+          ? {
+              ...m,
+              exercises: [
+                ...m.exercises,
+                {
+                  id: new Date().getTime(),
+                  exercise: "",
+                  sets: "",
+                  weight: "",
+                  reps: "",
+                },
+              ],
+            }
+          : m
+      )
+    );
   }
 
   return (
@@ -82,9 +114,10 @@ export const MuscleProvider = ({ children }) => {
       value={{
         muscles,
         setMuscles,
-        handleDeleteExercise,
+        handleDeleteMuscle,
         handleAddMuscle,
         handleClearMuscle,
+        handleAddExercise,
       }}
     >
       {children}
