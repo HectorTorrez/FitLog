@@ -19,7 +19,7 @@ export const AddMuscle = () => {
   }
 
   return (
-    <section className="max-w-md  my-10 mx-2 flex flex-col gap-3 text-center">
+    <section className="max-w-sm my-10  flex flex-col gap-3 text-center m-auto">
       {/* {alert && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-5">
           <p className="text-red-500">Muscle already exists</p>

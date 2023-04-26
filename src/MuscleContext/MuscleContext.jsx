@@ -49,8 +49,6 @@ export const MuscleProvider = ({ children }) => {
     },
   ]);
 
-  console.log(muscles);
-
   function handleAddMuscle(muscle) {
     if (!muscle) return;
     setMuscles([
@@ -71,9 +69,16 @@ export const MuscleProvider = ({ children }) => {
     ]);
   }
 
-  function handleToggleMuscle(id) {
-    setToggle(!toggle);
+  function handleEditMuscle(nextMuscle) {
+    muscles.map((m) => ({
+      ...m,
+      muscle: m.id === nextMuscle.id ? nextMuscle.muscle : m.muscle,
+    }));
   }
+
+  // function handleToggleMuscle(id) {
+  //   setToggle(!toggle);
+  // }
 
   function handleClearMuscle() {
     setMuscles([]);
@@ -112,7 +117,6 @@ export const MuscleProvider = ({ children }) => {
   }
 
   function handleChangeExercise(muscleId, nextExercise) {
-    console.log(muscleId, nextExercise);
     setMuscles(
       muscles.map((m) => ({
         ...m,
@@ -152,6 +156,7 @@ export const MuscleProvider = ({ children }) => {
         setMuscles,
         handleDeleteMuscle,
         handleAddMuscle,
+        handleEditMuscle,
         handleClearMuscle,
         handleAddExercise,
         handleDeleteExercise,
