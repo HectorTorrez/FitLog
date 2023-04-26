@@ -42,7 +42,7 @@ export const ExerciseCard = () => {
             </button>
           </div>
 
-          <ExerciseForm exercises={muscle.exercises} />
+          <ExerciseForm exercises={muscle.exercises} muscleId={muscle.id} />
         </section>
       ))}
     </section>

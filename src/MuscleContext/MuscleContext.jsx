@@ -49,6 +49,8 @@ export const MuscleProvider = ({ children }) => {
     },
   ]);
 
+  console.log(muscles);
+
   function handleAddMuscle(muscle) {
     if (!muscle) return;
     setMuscles([
@@ -109,6 +111,40 @@ export const MuscleProvider = ({ children }) => {
     );
   }
 
+  function handleChangeExercise(muscleId, nextExercise) {
+    console.log(muscleId, nextExercise);
+    setMuscles(
+      muscles.map((m) => ({
+        ...m,
+        exercises: m.exercises.map((e) => ({
+          ...e,
+          exercise:
+            e.id === nextExercise.id ? nextExercise.exercise : e.exercise,
+          sets: e.id === nextExercise.id ? nextExercise.sets : e.sets,
+          weight: e.id === nextExercise.id ? nextExercise.weight : e.weight,
+          reps: e.id === nextExercise.id ? nextExercise.reps : e.reps,
+        })),
+      }))
+    );
+  }
+
+  function handleDeleteExercise(muscleId, exerciseId) {
+    const confirmDelete = confirm(
+      "Are you sure you want to delete this exercise?"
+    );
+    if (!confirmDelete) return;
+    setMuscles(
+      muscles.map((m) =>
+        m.id === muscleId
+          ? {
+              ...m,
+              exercises: m.exercises.filter((e) => e.id !== exerciseId),
+            }
+          : m
+      )
+    );
+  }
+
   return (
     <MuscleContext.Provider
       value={{
@@ -118,6 +154,8 @@ export const MuscleProvider = ({ children }) => {
         handleAddMuscle,
         handleClearMuscle,
         handleAddExercise,
+        handleDeleteExercise,
+        handleChangeExercise,
       }}
     >
       {children}

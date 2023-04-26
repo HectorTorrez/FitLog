@@ -7,10 +7,10 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 
-export const Exercise = ({ exercise, onDeleteMuscle }) => {
+export const Exercise = ({ exercise, muscleId }) => {
   const [isEditing, setIsEditing] = useState(false);
 
-  const { handleDeleteExercise } = useMuscleContext();
+  const { handleDeleteExercise, handleChangeExercise } = useMuscleContext();
 
   let todoContent;
   if (isEditing) {
@@ -24,11 +24,17 @@ export const Exercise = ({ exercise, onDeleteMuscle }) => {
         </button>
 
         <input
-          className="w-16 shadow appearance-none border rounded py-2 px-3
+          className="w-32 shadow appearance-none border rounded py-2 px-1
         text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           type="text"
           name={exercise.id}
           value={exercise.exercise}
+          onChange={(e) =>
+            handleChangeExercise(muscleId, {
+              ...exercise,
+              exercise: e.target.value,
+            })
+          }
         ></input>
         <input
           className="w-16 shadow appearance-none border rounded py-2 px-3
@@ -36,14 +42,26 @@ export const Exercise = ({ exercise, onDeleteMuscle }) => {
           type="text"
           name={exercise.id}
           value={exercise.sets}
+          onChange={(e) =>
+            handleChangeExercise(muscleId, {
+              ...exercise,
+              sets: e.target.value,
+            })
+          }
         ></input>
 
         <input
-          className="w-16 shadow appearance-none border rounded py-2 px-3
+          className="w-24 shadow appearance-none border rounded py-2 px-3
         text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           type="text"
           name={exercise.id}
           value={exercise.reps}
+          onChange={(e) =>
+            handleChangeExercise(muscleId, {
+              ...exercise,
+              reps: e.target.value,
+            })
+          }
         ></input>
 
         <input
@@ -52,9 +70,15 @@ export const Exercise = ({ exercise, onDeleteMuscle }) => {
           type="text"
           name={exercise.id}
           value={exercise.weight}
+          onChange={(e) =>
+            handleChangeExercise(muscleId, {
+              ...exercise,
+              weight: e.target.value,
+            })
+          }
         ></input>
         <button
-          onClick={() => handleDeleteExercise(exercise.id)}
+          onClick={() => handleDeleteExercise(muscleId, exercise.id)}
           className=" text-red-500 font-bold py-1 px-1 rounded"
         >
           <FontAwesomeIcon icon={faTrash} />
@@ -70,13 +94,26 @@ export const Exercise = ({ exercise, onDeleteMuscle }) => {
         >
           <FontAwesomeIcon icon={faPenToSquare} />
         </button>
-
-        <p>Exercise: {exercise.exercise}</p>
-        <p>Sets: {exercise.sets}</p>
+        <div className="grid grid-cols-4 grid- gap-4">
+          <p className="text-lg font-bold ">
+            Exercise:{" "}
+            <span className="block font-normal">{exercise.exercise}</span>
+          </p>
+          <p className="text-lg font-bold">
+            Sets: <span className="block font-normal">{exercise.sets}</span>
+          </p>
+          <p className="text-lg font-bold ">
+            Reps: <span className="block font-normal">{exercise.reps}</span>
+          </p>
+          <p className="text-lg font-bold ">
+            Weight: <span className="block font-normal">{exercise.weight}</span>
+          </p>
+          {/* <p>Sets: {exercise.sets}</p>
         <p>Reps: {exercise.reps}</p>
-        <p>Weight: {exercise.weight}</p>
+        <p>Weight: {exercise.weight}</p> */}
+        </div>
         <button
-          onClick={() => handleDeleteExercise(exercise.id)}
+          onClick={() => handleDeleteExercise(muscleId, exercise.id)}
           className=" text-red-500 font-bold py-1 px-1 rounded"
         >
           <FontAwesomeIcon icon={faTrash} />
