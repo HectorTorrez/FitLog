@@ -8,7 +8,7 @@ export const Navbar = () => {
   };
 
   return (
-    <header className="flex justify-end m-auto mt-3 max-w-6xl">
+    <header className="flex justify-end m-auto pt-3 max-w-6xl">
       <nav className="w-52 flex  justify-around">
         <ul>
           <li>{user?.displayName || user?.email}</li>

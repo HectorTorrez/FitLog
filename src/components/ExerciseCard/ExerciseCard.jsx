@@ -10,10 +10,10 @@ export const ExerciseCard = () => {
   const [show, setShow] = useState(true);
 
   return (
-    <section className=" flex flex-col gap-3 items-center max-w-6xl    md:grid grid-cols-2  mb-5 ">
+    <section className=" flex flex-col gap-3 items-center max-w-6xl m-auto    md:grid grid-cols-2  mb-5 ">
       {muscles.map((muscle) => (
         <section
-          className="bg-white shadow-slate-500 border rounded py-5 text-center  w-full "
+          className="bg-gray-700 text-white shadow-slate-500 border rounded py-5 text-center  w-full "
           key={muscle.id}
         >
           <div className="flex gap-3 items-center justify-around m-auto">

@@ -3,9 +3,6 @@ import { createContext, useState } from "react";
 export const MuscleContext = createContext();
 
 export const MuscleProvider = ({ children }) => {
-  const [toggle, setToggle] = useState(true);
-  const [isMuscle, setIsMuscle] = useState(false);
-
   const [muscles, setMuscles] = useState(() => [
     {
       id: new Date().getTime(),
@@ -15,14 +12,30 @@ export const MuscleProvider = ({ children }) => {
           id: new Date().getTime() * 100,
           exercise: "test",
           sets: "2 ",
-          weight: "300 ",
           reps: "10",
+          mySets: [
+            {
+              id: new Date().getTime() * 1000,
+              set: "1",
+              weight: "10",
+            },
+            {
+              id: new Date().getTime() * 1000,
+              set: "2",
+              weight: "10",
+            },
+            {
+              id: new Date().getTime() * 1000,
+              set: "3",
+              weight: "10",
+            },
+          ],
         },
         {
           id: new Date().getTime() * 10,
           exercise: "test",
           sets: "5 ",
-          weight: "200",
+
           reps: "4 ",
         },
       ],
@@ -36,14 +49,12 @@ export const MuscleProvider = ({ children }) => {
           exercise: "test",
           reps: "3 ",
           sets: "2 ",
-          weight: "300 ",
         },
         {
           id: new Date().getTime(),
           exercise: "test",
           reps: "4 ",
           sets: "5 ",
-          weight: "200",
         },
       ],
     },
@@ -61,7 +72,7 @@ export const MuscleProvider = ({ children }) => {
             id: new Date().getTime() * 100,
             exercise: "",
             sets: "",
-            weight: "",
+
             reps: "",
           },
         ],
@@ -106,7 +117,6 @@ export const MuscleProvider = ({ children }) => {
                   id: new Date().getTime(),
                   exercise: "",
                   sets: "",
-                  weight: "",
                   reps: "",
                 },
               ],
@@ -117,6 +127,7 @@ export const MuscleProvider = ({ children }) => {
   }
 
   function handleChangeExercise(muscleId, nextExercise) {
+    console.log(nextExercise);
     setMuscles(
       muscles.map((m) => ({
         ...m,
@@ -125,12 +136,33 @@ export const MuscleProvider = ({ children }) => {
           exercise:
             e.id === nextExercise.id ? nextExercise.exercise : e.exercise,
           sets: e.id === nextExercise.id ? nextExercise.sets : e.sets,
-          weight: e.id === nextExercise.id ? nextExercise.weight : e.weight,
           reps: e.id === nextExercise.id ? nextExercise.reps : e.reps,
+
+          // mySets: e.mySets.map((s) => ({
+          //   ...s,
+          //   set: s.id === nextExercise.id ? nextExercise.set : s.set,
+          //   weight: s.id === nextExercise.id ? nextExercise.weight : s.weight,
+          // })),
         })),
       }))
     );
   }
+  // function handleChangeSets(exerciseId, nextSets) {
+  //   console.log(nextSets);
+  //   setMuscles(
+  //     muscles.map((m) => ({
+  //       ...m,
+  //       exercises: m.exercises.map((e) => ({
+  //         ...e,
+  //         mySets: e.mySets.map((s) => ({
+  //           ...s,
+  //           set: s.id === nextSets.id ? nextSets.set : s.set,
+  //           weight: s.id === nextSets.id ? nextSets.weight : s.weight,
+  //         })),
+  //       })),
+  //     }))
+  //   );
+  // }
 
   function handleDeleteExercise(muscleId, exerciseId) {
     const confirmDelete = confirm(
@@ -161,6 +193,7 @@ export const MuscleProvider = ({ children }) => {
         handleAddExercise,
         handleDeleteExercise,
         handleChangeExercise,
+        // handleChangeSets,
       }}
     >
       {children}
