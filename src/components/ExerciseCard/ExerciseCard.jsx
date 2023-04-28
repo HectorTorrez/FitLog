@@ -5,13 +5,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDumbbell, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export const ExerciseCard = () => {
-  const [edit, setEdit] = useState(false);
   const { muscles, handleDeleteMuscle, handleAddExercise } = useMuscleContext();
-  const [show, setShow] = useState(true);
 
   return (
     <section className=" flex flex-col gap-3 items-center max-w-6xl m-auto    md:grid grid-cols-2  mb-5 ">
-      {muscles.map((muscle) => (
+      {muscles?.map((muscle) => (
         <section
           className="bg-gray-700 text-white shadow-slate-500 border rounded py-5 text-center  w-full "
           key={muscle.id}
@@ -23,7 +21,7 @@ export const ExerciseCard = () => {
             >
               <FontAwesomeIcon icon={faDumbbell} />
             </button>
-            {/* {muscleContent} */}
+
             <h2 className="text-3xl w-52">{muscle.muscle}</h2>
             <button
               className="text-red-500 hover:text-red-700 text-3xl"

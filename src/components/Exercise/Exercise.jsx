@@ -2,29 +2,39 @@ import { Fragment, useState } from "react";
 import { useMuscleContext } from "../../hooks/useMuscleContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faDumbbell,
   faFloppyDisk,
   faPenToSquare,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
+import { MySets } from "../MySets/MySets";
 
-export const Exercise = ({ exercise, muscleId, mySets }) => {
+export const Exercise = ({ exercise, muscleId, exercises }) => {
   const [isEditing, setIsEditing] = useState(false);
 
-  const { handleDeleteExercise, handleChangeExercise } = useMuscleContext();
+  const { handleDeleteExercise, handleChangeExercise, handleAddSet } =
+    useMuscleContext();
 
   let todoContent;
   if (isEditing) {
     todoContent = (
       <>
         <section className="flex flex-col  gap-2 border-4 border-blue-400 py-5 px-2">
-          <div className="flex gap-2 items-end">
+          <div className="flex justify-center">
+            <button
+              onClick={() => handleAddSet(muscleId)}
+              className=" text-blue-500  py-1 px-1 font-bold   rounded focus:outline-none focus:shadow-outline"
+            >
+              <FontAwesomeIcon icon={faDumbbell} />
+            </button>
             <button
               className=" text-blue-500 font-bold py-1 px-1 rounded focus:outline-none focus:shadow-outline "
               onClick={() => setIsEditing(false)}
             >
               <FontAwesomeIcon icon={faFloppyDisk} />
             </button>
-
+          </div>
+          <div className="grid grid-cols-4 gap-2 items-center">
             <label htmlFor={exercise.id}>
               <p className="text-base font-bold">Exercise</p>
               <input
@@ -79,50 +89,19 @@ export const Exercise = ({ exercise, muscleId, mySets }) => {
 
             <button
               onClick={() => handleDeleteExercise(muscleId, exercise.id)}
-              className=" text-red-500 font-bold py-1 px-1 rounded"
+              className=" text-red-500 font-bold py-1 px-1 rounded grid-"
             >
               <FontAwesomeIcon icon={faTrash} />
             </button>
           </div>
-          <div className="flex gap-3 justify-center">
-            {/* {mySets?.map((set) => (
-              <section key={set.id} className="flex gap-1">
-                <label htmlFor="set">
-                  <p className="text-base font-bold">Set</p>
-
-                  <input
-                    className="w-5 shadow appearance-none border rounded p-1
-        text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                    value={set.set}
-                    name={set.id}
-                    onChange={(e) => {
-                      handleChangeSets(set.id, {
-                        ...exercise,
-                        set: e.target.value,
-                      });
-                    }}
-                  />
-                </label>
-                <label htmlFor="set">
-                  <p className="text-base font-bold">Weight</p>
-
-                  <input
-                    className="w-14 shadow appearance-none border rounded p-1
-        text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                    value={set.weight}
-                    name={exercise.id}
-                    onChange={(e) => {
-                      handleChangeSets(set.id, {
-                        ...exercise,
-                        weight: e.target.value,
-                      });
-                    }}
-                  />
-                </label>
-              </section>
-            ))} */}
+          <div className="grid grid-cols-2 gap-3 justify-center">
+            <MySets
+              key={exercise.id}
+              muscleId={muscleId}
+              exercise={exercise}
+              exerciseId={exercise.id}
+              isEditing={isEditing}
+            />
           </div>
         </section>
       </>
@@ -131,7 +110,13 @@ export const Exercise = ({ exercise, muscleId, mySets }) => {
     todoContent = (
       <>
         <section className="flex flex-col  gap-3 items-center  justify-center  border-blue-400 rounded p-5 border-4">
-          <div className=" flex  gap-4">
+          <div className=" flex   justify-between gap-6">
+            <button
+              onClick={() => handleAddSet(muscleId)}
+              className=" text-blue-500  py-1 px-1 font-bold   rounded focus:outline-none focus:shadow-outline"
+            >
+              <FontAwesomeIcon icon={faDumbbell} />
+            </button>
             <button
               className="text-yellow-600 font-bold py-1 px-1 rounded   "
               onClick={() => setIsEditing(true)}
@@ -150,10 +135,6 @@ export const Exercise = ({ exercise, muscleId, mySets }) => {
             <p className="text-base font-bold ">
               Reps <span className="block font-normal">{exercise.reps}</span>
             </p>
-            {/* <p className="text-base font-bold ">
-              Weight{" "}
-              <span className="block font-normal">{exercise.weight}</span>
-            </p> */}
 
             <button
               onClick={() => handleDeleteExercise(muscleId, exercise.id)}
@@ -162,19 +143,14 @@ export const Exercise = ({ exercise, muscleId, mySets }) => {
               <FontAwesomeIcon icon={faTrash} />
             </button>
           </div>
-          <div className="flex gap-4 ">
-            {/* {mySets?.map((sets) => (
-              <section key={sets.id}>
-                <div className=" flex gap-3 p-3">
-                  <p className="text-base font-bold ">
-                    Set <span className="block font-normal">{sets.set}</span>
-                  </p>
-                  <p className="text-base font-bold ">
-                    Lb <span className="block font-normal">{sets.weight}</span>
-                  </p>
-                </div>
-              </section>
-            ))} */}
+          <div className="flex gap-4  ">
+            <MySets
+              key={exercise.id}
+              muscleId={muscleId}
+              exercise={exercise}
+              exerciseId={exercise.id}
+              isEditing={isEditing}
+            />
           </div>
         </section>
       </>
