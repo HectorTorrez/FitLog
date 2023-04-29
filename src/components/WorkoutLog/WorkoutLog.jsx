@@ -3,7 +3,7 @@ import { WorkoutForm } from "../WorkoutForm/WorkoutForm";
 
 export const WorkoutLog = () => {
   return (
-    <div className="h-screen">
+    <div className="h-auto">
       <Navbar />
       <WorkoutForm />
     </div>

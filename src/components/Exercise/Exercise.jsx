@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { MySets } from "../MySets/MySets";
 
-export const Exercise = ({ exercise, muscleId, exercises }) => {
+export const Exercise = ({ exercise, muscleId }) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const { handleDeleteExercise, handleChangeExercise, handleAddSet } =
@@ -19,8 +19,8 @@ export const Exercise = ({ exercise, muscleId, exercises }) => {
   if (isEditing) {
     todoContent = (
       <>
-        <section className="flex flex-col  gap-2 border-4 border-blue-400 py-5 px-2">
-          <div className="flex justify-center">
+        <section className="flex flex-col   gap-2  py-5 px-2 ">
+          <div className="flex  justify-start gap-10">
             <button
               onClick={() => handleAddSet(muscleId)}
               className=" text-blue-500  py-1 px-1 font-bold   rounded focus:outline-none focus:shadow-outline"
@@ -33,8 +33,14 @@ export const Exercise = ({ exercise, muscleId, exercises }) => {
             >
               <FontAwesomeIcon icon={faFloppyDisk} />
             </button>
+            <button
+              onClick={() => handleDeleteExercise(muscleId, exercise.id)}
+              className=" text-red-500 font-bold py-1 px-1 rounded grid-"
+            >
+              <FontAwesomeIcon icon={faTrash} />
+            </button>
           </div>
-          <div className="grid grid-cols-4 gap-2 items-center">
+          <div className="grid grid-cols-3 justify-start pb-5 items-center border-b-2">
             <label htmlFor={exercise.id}>
               <p className="text-base font-bold">Exercise</p>
               <input
@@ -86,15 +92,8 @@ export const Exercise = ({ exercise, muscleId, exercises }) => {
                 }
               ></input>
             </label>
-
-            <button
-              onClick={() => handleDeleteExercise(muscleId, exercise.id)}
-              className=" text-red-500 font-bold py-1 px-1 rounded grid-"
-            >
-              <FontAwesomeIcon icon={faTrash} />
-            </button>
           </div>
-          <div className="grid grid-cols-2 gap-3 justify-center">
+          <div className="grid grid-cols-2 gap-3  justify-start">
             <MySets
               key={exercise.id}
               muscleId={muscleId}
@@ -109,8 +108,8 @@ export const Exercise = ({ exercise, muscleId, exercises }) => {
   } else {
     todoContent = (
       <>
-        <section className="flex flex-col  gap-3 items-center  justify-center  border-blue-400 rounded p-5 border-4">
-          <div className=" flex   justify-between gap-6">
+        <section className="flex flex-col   gap-6 items-center  justify-center   rounded py-5 px-2 border-b-2 ">
+          <div className="flex gap-4 place-content-between">
             <button
               onClick={() => handleAddSet(muscleId)}
               className=" text-blue-500  py-1 px-1 font-bold   rounded focus:outline-none focus:shadow-outline"
@@ -123,7 +122,15 @@ export const Exercise = ({ exercise, muscleId, exercises }) => {
             >
               <FontAwesomeIcon icon={faPenToSquare} />
             </button>
+            <button
+              onClick={() => handleDeleteExercise(muscleId, exercise.id)}
+              className=" text-red-500 font-bold py-1 px-1 rounded"
+            >
+              <FontAwesomeIcon icon={faTrash} />
+            </button>
+          </div>
 
+          <div className=" flex items-center  justify-between gap-6">
             <p className="text-base font-bold ">
               Exercise{" "}
               <span className="block font-normal">{exercise.exercise}</span>
@@ -135,15 +142,8 @@ export const Exercise = ({ exercise, muscleId, exercises }) => {
             <p className="text-base font-bold ">
               Reps <span className="block font-normal">{exercise.reps}</span>
             </p>
-
-            <button
-              onClick={() => handleDeleteExercise(muscleId, exercise.id)}
-              className=" text-red-500 font-bold py-1 px-1 rounded"
-            >
-              <FontAwesomeIcon icon={faTrash} />
-            </button>
           </div>
-          <div className="flex gap-4  ">
+          <div className="grid grid-cols-2  gap-4  ">
             <MySets
               key={exercise.id}
               muscleId={muscleId}
@@ -159,10 +159,7 @@ export const Exercise = ({ exercise, muscleId, exercises }) => {
 
   return (
     <div>
-      <label
-        htmlFor=""
-        className="flex   gap-2 justify-center m-5 items-center"
-      >
+      <label className="flex   gap-2 justify-center  items-center  ">
         {todoContent}
       </label>
     </div>

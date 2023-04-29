@@ -4,112 +4,7 @@ export const MuscleContext = createContext();
 
 export const MuscleProvider = ({ children }) => {
   const [muscles, setMuscles] = useState([]);
-  // () => [
-  //   {
-  //     id: new Date().getTime(),
-  //     muscle: "Test 1",
-  //     exercises: [
-  //       {
-  //         id: new Date().getTime() * 100,
-  //         exercise: "test",
-  //         sets: "2 ",
-  //         reps: "10",
-  //         mySets: [
-  //           {
-  //             id: new Date().getTime() * 1442,
-  //             set: "1",
-  //             weight: "10lbs - 8reps",
-  //           },
-  //           {
-  //             id: new Date().getTime() * 1025,
-  //             set: "2",
-  //             weight: "10",
-  //           },
-  //           {
-  //             id: new Date().getTime() * 1214,
-  //             set: "3",
-  //             weight: "100",
-  //           },
-  //         ],
-  //       },
-  //       {
-  //         id: new Date().getTime() * 100,
-  //         exercise: "test",
-  //         sets: "2 ",
-  //         reps: "10",
-  //         mySets: [
-  //           {
-  //             id: new Date().getTime() * 1444,
-  //             set: "1",
-  //             weight: "10lbs - 10reps",
-  //           },
-  //           {
-  //             id: new Date().getTime() * 1025,
-  //             set: "2",
-  //             weight: "10",
-  //           },
-  //           {
-  //             id: new Date().getTime() * 1214,
-  //             set: "3",
-  //             weight: "100",
-  //           },
-  //         ],
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     id: new Date().getTime() * 200,
-  //     muscle: "Test 2",
-  //     exercises: [
-  //       {
-  //         id: new Date().getTime() + 10,
-  //         exercise: "test",
-  //         reps: "3 ",
-  //         sets: "2 ",
-  //         mySets: [
-  //           {
-  //             id: new Date().getTime() * 100,
-  //             set: "1",
-  //             weight: "10",
-  //           },
-  //           {
-  //             id: new Date().getTime() * 1001,
-  //             set: "2",
-  //             weight: "10",
-  //           },
-  //           {
-  //             id: new Date().getTime() * 1002,
-  //             set: "3",
-  //             weight: "10",
-  //           },
-  //         ],
-  //       },
-  //       {
-  //         id: new Date().getTime(),
-  //         exercise: "test",
-  //         reps: "4 ",
-  //         sets: "5 ",
-  //         mySets: [
-  //           {
-  //             id: new Date().getTime() * 1005,
-  //             set: "1",
-  //             weight: "10",
-  //           },
-  //           {
-  //             id: new Date().getTime() * 10,
-  //             set: "2",
-  //             weight: "10",
-  //           },
-  //           {
-  //             id: new Date().getTime() * 1010,
-  //             set: "3",
-  //             weight: "10",
-  //           },
-  //         ],
-  //       },
-  //     ],
-  //   },
-  // ]
+  const [toggle, setToggle] = useState(false);
 
   function handleAddMuscle(muscle) {
     if (!muscle) return;
@@ -144,25 +39,35 @@ export const MuscleProvider = ({ children }) => {
     }));
   }
 
-  // function handleToggleMuscle(id) {
-  //   setToggle(!toggle);
-  // }
+  function handleToggleMuscle(id) {
+    console.log(id);
+    const knowMuscle = muscles.filter((m) => m.id === id);
+    if (knowMuscle) {
+      setToggle(!toggle);
+    } else {
+      setToggle(false);
+    }
+  }
 
   function handleClearMuscle() {
-    setMuscles([]);
+    confirm("Are you sure you want to clear all muscle groups?")
+      ? setMuscles([])
+      : null;
   }
 
   function handleDeleteMuscle(id) {
-    const confirmDelete = confirm(
-      "Are you sure you want to delete this muscle group?"
-    );
-    if (!confirmDelete) return;
+    // const confirmDeleteMuscle = confirm(
+    //   "Are you sure you want to delete this muscle group?"
+    // );
+    // if (!confirmDeleteMuscle) return;
     setMuscles(muscles.filter((m) => m.id !== id));
   }
 
   function handleAddExercise(muscleId) {
-    const confirmAdd = confirm("Are you sure you want to add an exercise?");
-    if (!confirmAdd) return;
+    // const confirmAddExercise = confirm(
+    //   "Are you sure you want to add an exercise?"
+    // );
+    // if (!confirmAddExercise) return;
     setMuscles(
       muscles.map((m) =>
         m.id === muscleId
@@ -222,13 +127,14 @@ export const MuscleProvider = ({ children }) => {
   }
 
   function handleAddSet(muscleId) {
-    const confirmAdd = confirm("Are you sure you want to add a set?");
-    if (!confirmAdd) return;
+    console.log(muscleId);
+
     setMuscles(
       muscles.map((m) =>
         m.id === muscleId
           ? {
               ...m,
+
               exercises: m.exercises.map((e) => ({
                 ...e,
                 mySets: [
@@ -247,8 +153,11 @@ export const MuscleProvider = ({ children }) => {
   }
 
   function handleDeleteSet(muscleId, setId) {
-    const confirmDelete = confirm("Are you sure you want to delete this set?");
-    if (!confirmDelete) return;
+    console.log(muscleId, setId);
+    // const confirmDeleteSet = confirm(
+    //   "Are you sure you want to delete this set?"
+    // );
+    // if (!confirmDeleteSet) return;
     setMuscles(
       muscles.map((m) =>
         m.id === muscleId
@@ -265,10 +174,10 @@ export const MuscleProvider = ({ children }) => {
   }
 
   function handleDeleteExercise(muscleId, exerciseId) {
-    const confirmDelete = confirm(
-      "Are you sure you want to delete this exercise?"
-    );
-    if (!confirmDelete) return;
+    // const confirmDeleteExercise = confirm(
+    //   "Are you sure you want to delete this exercise?"
+    // );
+    // if (!confirmDeleteExercise) return;
     setMuscles(
       muscles.map((m) =>
         m.id === muscleId

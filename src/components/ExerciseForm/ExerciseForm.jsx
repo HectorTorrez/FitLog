@@ -1,10 +1,9 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useMuscleContext } from "../../hooks/useMuscleContext";
 import { Exercise } from "../Exercise/Exercise";
-import { faDumbbell } from "@fortawesome/free-solid-svg-icons";
 
 export const ExerciseForm = ({ exercises, muscleId }) => {
   return (
-    <section className=" ">
+    <>
       {exercises?.map((mus) => (
         <Exercise
           key={mus.id}
@@ -13,6 +12,6 @@ export const ExerciseForm = ({ exercises, muscleId }) => {
           exercises={exercises}
         />
       ))}
-    </section>
+    </>
   );
 };

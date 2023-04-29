@@ -8,10 +8,7 @@ export const Sets = ({ set, isEditing, muscleId }) => {
   let setContent;
   if (isEditing) {
     setContent = (
-      <section
-        key={set.id}
-        className="grid grid-cols-3 items-end justify-center"
-      >
+      <section key={set.id} className="grid grid-cols-3 items-end ">
         <label htmlFor="set">
           <p className="text-base font-bold">Set</p>
 
@@ -33,7 +30,7 @@ export const Sets = ({ set, isEditing, muscleId }) => {
           <p className="text-base font-bold">Weight</p>
 
           <input
-            className="w-14 shadow appearance-none border rounded p-1
+            className="w-16 shadow appearance-none border rounded p-1
             text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             value={set.weight}
@@ -57,12 +54,12 @@ export const Sets = ({ set, isEditing, muscleId }) => {
   } else {
     setContent = (
       <Fragment key={set.id}>
-        <section className=" flex gap-3 p-3 items-center">
-          <p className="text-base font-bold ">
-            Set <span className="block font-normal">{set.set}</span>
+        <section className=" flex  gap-3 p-3  w-40 ">
+          <p className="text-base font-bold w-40  ">
+            Set <span className="block font-normal ">{set.set}</span>
           </p>
-          <p className="text-base font-bold ">
-            Lb <span className="block font-normal">{set.weight}</span>
+          <p className="text-base font-bold w-52">
+            Lb <span className="block font-normal ">{set.weight}</span>
           </p>
           <button
             onClick={() => handleDeleteSet(muscleId, set.id)}
@@ -75,5 +72,5 @@ export const Sets = ({ set, isEditing, muscleId }) => {
     );
   }
 
-  return <section>{setContent}</section>;
+  return <>{setContent}</>;
 };
