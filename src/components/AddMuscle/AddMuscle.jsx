@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useMuscleContext } from "../../hooks/useMuscleContext";
+import { Alert, AlertTitle } from "@mui/material";
 
 export const AddMuscle = () => {
   const [muscleInput, setMuscleInput] = useState("");
 
-  const { handleAddMuscle, handleClearMuscle } = useMuscleContext();
+  const { handleAddMuscle, handleClearMuscle, addMuscleError } =
+    useMuscleContext();
 
   const handleDown = (event) => {
     if (event.key === "Enter") {
@@ -20,6 +22,12 @@ export const AddMuscle = () => {
 
   return (
     <section className="max-w-sm my-10  flex flex-col gap-3 text-center m-auto">
+      {addMuscleError && (
+        <Alert severity="warning">
+          <AlertTitle>Warning</AlertTitle>
+          <strong>{addMuscleError}</strong>
+        </Alert>
+      )}
       {/* {alert && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-5">
           <p className="text-red-500">Muscle already exists</p>

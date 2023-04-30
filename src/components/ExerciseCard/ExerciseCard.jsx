@@ -3,8 +3,11 @@ import { ExerciseForm } from "../ExerciseForm/ExerciseForm";
 import { useMuscleContext } from "../../hooks/useMuscleContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDumbbell, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { MuscleTitle } from "../MuscleTitle/MuscleTitle";
 
 export const ExerciseCard = () => {
+  const [isMuscleEditing, setIsMuscleEditing] = useState(false);
+
   const { muscles, handleDeleteMuscle, handleAddExercise, handleToggleMuscle } =
     useMuscleContext();
 
@@ -23,12 +26,19 @@ export const ExerciseCard = () => {
               <FontAwesomeIcon icon={faDumbbell} />
             </button>
 
-            <h2
+            <MuscleTitle
+              key={muscle.id}
+              muscle={muscle}
+              isMuscleEditing={isMuscleEditing}
+              setIsMuscleEditing={setIsMuscleEditing}
+            />
+
+            {/* <h2
               onClick={() => handleToggleMuscle(muscle.id)}
               className="text-4xl font-bold w-52"
             >
               {muscle.muscle}
-            </h2>
+            </h2> */}
             <button
               className="text-red-500 hover:text-red-700 text-3xl"
               onClick={() => handleDeleteMuscle(muscle.id)}

@@ -6,13 +6,19 @@ export const MuscleProvider = ({ children }) => {
   const [muscles, setMuscles] = useState(() => []);
   const [toggle, setToggle] = useState(false);
 
+  const [addMuscleError, setAddMuscleError] = useState(null);
+
   function handleAddMuscle(muscle) {
-    if (muscle.length <= 1) return alert("Muscle group must be longer");
+    console.log(muscle);
+    if (muscle.length <= 1)
+      return setAddMuscleError(
+        "Muscle group must be at least 2 characters long"
+      );
     setMuscles([
       ...muscles,
       {
         id: new Date().getTime(),
-        muscle,
+        muscle: muscle,
         exercises: [
           {
             id: new Date().getTime() * 100,
@@ -30,14 +36,20 @@ export const MuscleProvider = ({ children }) => {
         ],
       },
     ]);
+    setAddMuscleError(null);
   }
 
-  // function handleEditMuscle(nextMuscle) {
-  //   muscles.map((m) => ({
-  //     ...m,
-  //     muscle: m.id === nextMuscle.id ? nextMuscle.muscle : m.muscle,
-  //   }));
-  // }
+  function handleEditMuscle(muscleId, nextMuscle) {
+    console.log(nextMuscle);
+    muscles.map((m) =>
+      m.id === muscleId
+        ? {
+            ...m,
+            muscle: nextMuscle,
+          }
+        : m
+    );
+  }
 
   function handleToggleMuscle(id) {
     console.log(id);
@@ -64,10 +76,6 @@ export const MuscleProvider = ({ children }) => {
   }
 
   function handleAddExercise(muscleId) {
-    // const confirmAddExercise = confirm(
-    //   "Are you sure you want to add an exercise?"
-    // );
-    // if (!confirmAddExercise) return;
     setMuscles(
       muscles.map((m) =>
         m.id === muscleId
@@ -127,8 +135,6 @@ export const MuscleProvider = ({ children }) => {
   }
 
   function handleAddSet(muscleId, exerciseId) {
-    console.log(muscleId);
-
     setMuscles(
       muscles.map((m) =>
         m.id === muscleId
@@ -159,7 +165,6 @@ export const MuscleProvider = ({ children }) => {
   }
 
   function handleDeleteSet(muscleId, setId) {
-    console.log(muscleId, setId);
     const confirmDeleteSet = confirm(
       "Are you sure you want to delete this set?"
     );
@@ -195,15 +200,16 @@ export const MuscleProvider = ({ children }) => {
       )
     );
   }
-  console.log(muscles);
+
   return (
     <MuscleContext.Provider
       value={{
+        addMuscleError,
         muscles,
         setMuscles,
         handleDeleteMuscle,
         handleAddMuscle,
-        // handleEditMuscle,
+        handleEditMuscle,
         handleClearMuscle,
         handleAddExercise,
         handleDeleteExercise,
