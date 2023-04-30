@@ -22,7 +22,7 @@ export const Exercise = ({ exercise, muscleId }) => {
         <section className="flex flex-col   gap-2  py-5 px-2 ">
           <div className="flex  justify-start gap-10">
             <button
-              onClick={() => handleAddSet(muscleId)}
+              onClick={() => handleAddSet(muscleId, exercise.id)}
               className=" text-blue-500  py-1 px-1 font-bold   rounded focus:outline-none focus:shadow-outline"
             >
               <FontAwesomeIcon icon={faDumbbell} />
@@ -41,14 +41,14 @@ export const Exercise = ({ exercise, muscleId }) => {
             </button>
           </div>
           <div className="grid grid-cols-3 justify-start pb-5 items-center border-b-2">
-            <label htmlFor={exercise.id}>
+            <label htmlFor={exercise.exercise}>
               <p className="text-base font-bold">Exercise</p>
               <input
                 className="w-24 shadow appearance-none border rounded p-1
           text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 maxLength={15}
                 type="text"
-                name={exercise.id}
+                name={exercise.exercise}
                 value={exercise.exercise}
                 onChange={(e) =>
                   handleChangeExercise(muscleId, {
@@ -59,13 +59,13 @@ export const Exercise = ({ exercise, muscleId }) => {
               ></input>
             </label>
 
-            <label htmlFor={exercise.id}>
+            <label htmlFor={exercise.set}>
               <p className="text-base font-bold">Sets</p>
               <input
                 className="w-10 shadow appearance-none border rounded p-1
         text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text"
-                name={exercise.id}
+                name={exercise.set}
                 value={exercise.sets}
                 onChange={(e) =>
                   handleChangeExercise(muscleId, {
@@ -76,13 +76,13 @@ export const Exercise = ({ exercise, muscleId }) => {
               ></input>
             </label>
 
-            <label htmlFor={exercise.id}>
+            <label htmlFor={exercise.reps}>
               <p className="text-base font-bold">Reps</p>
               <input
                 className="w-24 shadow appearance-none border rounded p-1
         text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text"
-                name={exercise.id}
+                name={exercise.reps}
                 value={exercise.reps}
                 onChange={(e) =>
                   handleChangeExercise(muscleId, {
@@ -111,7 +111,8 @@ export const Exercise = ({ exercise, muscleId }) => {
         <section className="flex flex-col   gap-6 items-center  justify-center   rounded py-5 px-2 border-b-2 ">
           <div className="flex gap-4 place-content-between">
             <button
-              onClick={() => handleAddSet(muscleId)}
+              type="button"
+              onClick={() => handleAddSet(muscleId, exercise.id)}
               className=" text-blue-500  py-1 px-1 font-bold   rounded focus:outline-none focus:shadow-outline"
             >
               <FontAwesomeIcon icon={faDumbbell} />
@@ -159,7 +160,7 @@ export const Exercise = ({ exercise, muscleId }) => {
 
   return (
     <div>
-      <label className="flex   gap-2 justify-center  items-center  ">
+      <label className="flex   gap-2 justify-center  items-center  " htmlFor="">
         {todoContent}
       </label>
     </div>

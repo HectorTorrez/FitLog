@@ -3,11 +3,11 @@ import { createContext, useState } from "react";
 export const MuscleContext = createContext();
 
 export const MuscleProvider = ({ children }) => {
-  const [muscles, setMuscles] = useState([]);
+  const [muscles, setMuscles] = useState(() => []);
   const [toggle, setToggle] = useState(false);
 
   function handleAddMuscle(muscle) {
-    if (!muscle) return;
+    if (muscle.length <= 1) return alert("Muscle group must be longer");
     setMuscles([
       ...muscles,
       {
@@ -32,12 +32,12 @@ export const MuscleProvider = ({ children }) => {
     ]);
   }
 
-  function handleEditMuscle(nextMuscle) {
-    muscles.map((m) => ({
-      ...m,
-      muscle: m.id === nextMuscle.id ? nextMuscle.muscle : m.muscle,
-    }));
-  }
+  // function handleEditMuscle(nextMuscle) {
+  //   muscles.map((m) => ({
+  //     ...m,
+  //     muscle: m.id === nextMuscle.id ? nextMuscle.muscle : m.muscle,
+  //   }));
+  // }
 
   function handleToggleMuscle(id) {
     console.log(id);
@@ -56,10 +56,10 @@ export const MuscleProvider = ({ children }) => {
   }
 
   function handleDeleteMuscle(id) {
-    // const confirmDeleteMuscle = confirm(
-    //   "Are you sure you want to delete this muscle group?"
-    // );
-    // if (!confirmDeleteMuscle) return;
+    const confirmDeleteMuscle = confirm(
+      "Are you sure you want to delete this muscle group?"
+    );
+    if (!confirmDeleteMuscle) return;
     setMuscles(muscles.filter((m) => m.id !== id));
   }
 
@@ -82,7 +82,7 @@ export const MuscleProvider = ({ children }) => {
                   reps: "",
                   mySets: [
                     {
-                      id: new Date().getTime() * 100,
+                      id: new Date().getTime(),
                       set: "",
                       weight: "",
                     },
@@ -126,7 +126,7 @@ export const MuscleProvider = ({ children }) => {
     );
   }
 
-  function handleAddSet(muscleId) {
+  function handleAddSet(muscleId, exerciseId) {
     console.log(muscleId);
 
     setMuscles(
@@ -135,17 +135,23 @@ export const MuscleProvider = ({ children }) => {
           ? {
               ...m,
 
-              exercises: m.exercises.map((e) => ({
-                ...e,
-                mySets: [
-                  ...e.mySets,
-                  {
-                    id: new Date().getTime(),
-                    set: "",
-                    weight: "",
-                  },
-                ],
-              })),
+              exercises: m.exercises.map((e) => {
+                if (e.id === exerciseId) {
+                  return {
+                    ...e,
+                    mySets: [
+                      ...e.mySets,
+                      {
+                        id: new Date().getTime(),
+                        set: "",
+                        weight: "",
+                      },
+                    ],
+                  };
+                } else {
+                  return e;
+                }
+              }),
             }
           : m
       )
@@ -154,10 +160,10 @@ export const MuscleProvider = ({ children }) => {
 
   function handleDeleteSet(muscleId, setId) {
     console.log(muscleId, setId);
-    // const confirmDeleteSet = confirm(
-    //   "Are you sure you want to delete this set?"
-    // );
-    // if (!confirmDeleteSet) return;
+    const confirmDeleteSet = confirm(
+      "Are you sure you want to delete this set?"
+    );
+    if (!confirmDeleteSet) return;
     setMuscles(
       muscles.map((m) =>
         m.id === muscleId
@@ -174,10 +180,10 @@ export const MuscleProvider = ({ children }) => {
   }
 
   function handleDeleteExercise(muscleId, exerciseId) {
-    // const confirmDeleteExercise = confirm(
-    //   "Are you sure you want to delete this exercise?"
-    // );
-    // if (!confirmDeleteExercise) return;
+    const confirmDeleteExercise = confirm(
+      "Are you sure you want to delete this exercise?"
+    );
+    if (!confirmDeleteExercise) return;
     setMuscles(
       muscles.map((m) =>
         m.id === muscleId
@@ -189,7 +195,7 @@ export const MuscleProvider = ({ children }) => {
       )
     );
   }
-
+  console.log(muscles);
   return (
     <MuscleContext.Provider
       value={{
@@ -197,7 +203,7 @@ export const MuscleProvider = ({ children }) => {
         setMuscles,
         handleDeleteMuscle,
         handleAddMuscle,
-        handleEditMuscle,
+        // handleEditMuscle,
         handleClearMuscle,
         handleAddExercise,
         handleDeleteExercise,
