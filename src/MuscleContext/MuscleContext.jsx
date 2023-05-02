@@ -39,27 +39,27 @@ export const MuscleProvider = ({ children }) => {
     setAddMuscleError(null);
   }
 
-  function handleEditMuscle(muscleId, nextMuscle) {
-    console.log(nextMuscle);
-    muscles.map((m) =>
-      m.id === muscleId
-        ? {
-            ...m,
-            muscle: nextMuscle,
-          }
-        : m
-    );
-  }
+  // function handleEditMuscle(muscleId, nextMuscle) {
+  //   console.log(nextMuscle);
+  //   muscles.map((m) =>
+  //     m.id === muscleId
+  //       ? {
+  //           ...m,
+  //           muscle: nextMuscle,
+  //         }
+  //       : m
+  //   );
+  // }
 
-  function handleToggleMuscle(id) {
-    console.log(id);
-    const knowMuscle = muscles.filter((m) => m.id === id);
-    if (knowMuscle) {
-      setToggle(!toggle);
-    } else {
-      setToggle(false);
-    }
-  }
+  // function handleToggleMuscle(id) {
+  //   console.log(id);
+  //   const knowMuscle = muscles.filter((m) => m.id === id);
+  //   if (knowMuscle) {
+  //     setToggle(!toggle);
+  //   } else {
+  //     setToggle(false);
+  //   }
+  // }
 
   function handleClearMuscle() {
     confirm("Are you sure you want to clear all muscle groups?")
@@ -209,7 +209,7 @@ export const MuscleProvider = ({ children }) => {
         setMuscles,
         handleDeleteMuscle,
         handleAddMuscle,
-        handleEditMuscle,
+        // handleEditMuscle,
         handleClearMuscle,
         handleAddExercise,
         handleDeleteExercise,

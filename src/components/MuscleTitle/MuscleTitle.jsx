@@ -15,7 +15,7 @@ export const MuscleTitle = ({
       <>
         <button
           className=" text-blue-500 font-bold py-1 px-1 rounded focus:outline-none focus:shadow-outline "
-          onClick={() => setIsMuscleEditing(false)}
+          // onClick={() => setIsMuscleEditing(false)}
         >
           <FontAwesomeIcon icon={faFloppyDisk} />
         </button>
@@ -37,7 +37,7 @@ export const MuscleTitle = ({
       <>
         <button
           className="text-yellow-600 font-bold py-1 px-1 rounded   "
-          onClick={() => setIsMuscleEditing(true)}
+          // onClick={() => setIsMuscleEditing(true)}
         >
           <FontAwesomeIcon icon={faPenToSquare} />
         </button>

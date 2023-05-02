@@ -9,21 +9,19 @@ import { MuscleProvider } from "./MuscleContext/MuscleContext";
 export const App = () => {
   return (
     <AuthProvider>
-      <MuscleProvider>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/resetPassword" element={<ResetPassword />} />
-        </Routes>
-      </MuscleProvider>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/resetPassword" element={<ResetPassword />} />
+      </Routes>
     </AuthProvider>
   );
 };
