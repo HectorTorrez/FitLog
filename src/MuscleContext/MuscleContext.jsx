@@ -1,4 +1,17 @@
-import { createContext, useState } from "react";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  limit,
+  onSnapshot,
+  orderBy,
+  query,
+  serverTimestamp,
+} from "firebase/firestore";
+import { createContext, useEffect, useState } from "react";
+import { auth, db } from "../firebase";
 
 export const MuscleContext = createContext();
 
@@ -8,17 +21,20 @@ export const MuscleProvider = ({ children }) => {
 
   const [addMuscleError, setAddMuscleError] = useState(null);
 
-  function handleAddMuscle(muscle) {
-    console.log(muscle);
-    if (muscle.length <= 1)
+  const muscleRef = collection(db, "muscles1");
+
+  async function handleAddMuscle(muscle) {
+    if (muscle.length <= 1) {
       return setAddMuscleError(
         "Muscle group must be at least 2 characters long"
       );
-    setMuscles([
-      ...muscles,
-      {
-        id: new Date().getTime(),
+    }
+
+    try {
+      await addDoc(muscleRef, {
         muscle: muscle,
+        createAt: serverTimestamp(),
+        user: auth.currentUser.displayName,
         exercises: [
           {
             id: new Date().getTime() * 100,
@@ -34,36 +50,73 @@ export const MuscleProvider = ({ children }) => {
             ],
           },
         ],
-      },
-    ]);
-    setAddMuscleError(null);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+    // if (muscle.length <= 1)
+    //   return setAddMuscleError(
+    //     "Muscle group must be at least 2 characters long"
+    //   );
+    // setMuscles([
+    //   ...muscles,
+    //   {
+    //     id: new Date().getTime(),
+    //     muscle: muscle,
+    //     exercises: [
+    //       {
+    //         id: new Date().getTime() * 100,
+    //         exercise: "",
+    //         sets: "",
+    //         reps: "",
+    //         mySets: [
+    //           {
+    //             id: new Date().getTime() * 1000,
+    //             set: "",
+    //             weight: "",
+    //           },
+    //         ],
+    //       },
+    //     ],
+    //   },
+    // ]);
+    // setAddMuscleError(null);
   }
 
-  // function handleEditMuscle(muscleId, nextMuscle) {
-  //   console.log(nextMuscle);
-  //   muscles.map((m) =>
-  //     m.id === muscleId
-  //       ? {
-  //           ...m,
-  //           muscle: nextMuscle,
-  //         }
-  //       : m
-  //   );
-  // }
+  async function getMuscles() {
+    try {
+      // const queryMuscles = query(muscleRef, orderBy("createAt"), limit(3));
+      const muscleCol = collection(db, "muscles1");
+      const muscleSnapshot = await getDocs(muscleCol);
+      const muscleList = muscleSnapshot.docs.map((doc) => doc.data());
+      setMuscles(muscleList);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-  // function handleToggleMuscle(id) {
-  //   console.log(id);
-  //   const knowMuscle = muscles.filter((m) => m.id === id);
-  //   if (knowMuscle) {
-  //     setToggle(!toggle);
-  //   } else {
-  //     setToggle(false);
-  //   }
-  // }
+  useEffect(() => {
+    getMuscles();
+  }, [handleAddMuscle]);
 
-  function handleClearMuscle() {
+  // useEffect(() => {
+  //   const queryMuscles = query(muscleRef, orderBy("createAt"), limit(3));
+  //   const unsuscribe = onSnapshot(queryMuscles, (snapshot) => {
+  //     const firestoreMuscles = [];
+  //     snapshot.forEach((doc) => {
+  //       firestoreMuscles.push(...doc.data());
+  //     });
+
+  //     setMuscles(firestoreMuscles);
+  //   });
+
+  //   return () => unsuscribe();
+  // }, []);
+
+  async function handleClearMuscle() {
     confirm("Are you sure you want to clear all muscle groups?")
-      ? setMuscles([])
+      ? await deleteDoc(doc(db, "muscles1"))
       : null;
   }
 
@@ -72,7 +125,7 @@ export const MuscleProvider = ({ children }) => {
       "Are you sure you want to delete this muscle group?"
     );
     if (!confirmDeleteMuscle) return;
-    setMuscles(muscles.filter((m) => m.id !== id));
+    setMuscles(muscles.filter((m) => m.createAt !== id));
   }
 
   function handleAddExercise(muscleId) {

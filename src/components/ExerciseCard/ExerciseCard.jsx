@@ -16,7 +16,7 @@ export const ExerciseCard = () => {
       {muscles?.map((muscle) => (
         <section
           className="   text-black border shadow-sm rounded  text-center  w-full  "
-          key={muscle.id}
+          key={muscle.createAt}
         >
           <div className="flex gap-3 items-center justify-around m-auto border-b-2 pb-5 py-5 bg-gray-100">
             <button
@@ -41,7 +41,7 @@ export const ExerciseCard = () => {
             </h2> */}
             <button
               className="text-red-500 hover:text-red-700 text-3xl"
-              onClick={() => handleDeleteMuscle(muscle.id)}
+              onClick={() => handleDeleteMuscle(muscle.createAt)}
             >
               <FontAwesomeIcon icon={faTrash} />
             </button>

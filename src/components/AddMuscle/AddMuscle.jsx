@@ -8,14 +8,14 @@ export const AddMuscle = () => {
   const { handleAddMuscle, handleClearMuscle, addMuscleError } =
     useMuscleContext();
 
-  const handleDown = (event) => {
+  const handleDown = async (event) => {
     if (event.key === "Enter") {
       handleAddMuscle(muscleInput);
       setMuscleInput("");
     }
   };
 
-  function handleClick() {
+  async function handleClick() {
     handleAddMuscle(muscleInput);
     setMuscleInput("");
   }
