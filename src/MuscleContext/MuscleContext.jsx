@@ -1,14 +1,19 @@
 import {
   addDoc,
+  arrayRemove,
+  arrayUnion,
   collection,
   deleteDoc,
+  deleteField,
   doc,
+  getDoc,
   getDocs,
   limit,
   onSnapshot,
   orderBy,
   query,
   serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
 import { createContext, useEffect, useState } from "react";
 import { auth, db } from "../firebase";
@@ -84,35 +89,35 @@ export const MuscleProvider = ({ children }) => {
     // setAddMuscleError(null);
   }
 
-  async function getMuscles() {
-    try {
-      // const queryMuscles = query(muscleRef, orderBy("createAt"), limit(3));
-      const muscleCol = collection(db, "muscles1");
-      const muscleSnapshot = await getDocs(muscleCol);
-      const muscleList = muscleSnapshot.docs.map((doc) => doc.data());
-      setMuscles(muscleList);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  useEffect(() => {
-    getMuscles();
-  }, [handleAddMuscle]);
+  // async function getMuscles() {
+  //   try {
+  //     const queryMuscles = query(muscleRef, orderBy("createAt"), limit(3));
+  //     const muscleCol = collection(db, "muscles1");
+  //     const muscleSnapshot = await getDocs(queryMuscles, muscleCol);
+  //     const muscleList = muscleSnapshot.docs.map((doc) => doc.data());
+  //     setMuscles(muscleList);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   // useEffect(() => {
-  //   const queryMuscles = query(muscleRef, orderBy("createAt"), limit(3));
-  //   const unsuscribe = onSnapshot(queryMuscles, (snapshot) => {
-  //     const firestoreMuscles = [];
-  //     snapshot.forEach((doc) => {
-  //       firestoreMuscles.push(...doc.data());
-  //     });
+  //   getMuscles();
+  // }, [handleAddMuscle]);
 
-  //     setMuscles(firestoreMuscles);
-  //   });
+  useEffect(() => {
+    const queryMuscles = query(muscleRef, orderBy("createAt"), limit(7));
+    const unsuscribe = onSnapshot(queryMuscles, (snapshot) => {
+      const firestoreMuscles = [];
+      snapshot.forEach((doc) => {
+        firestoreMuscles.push({ ...doc.data(), newID: doc.id });
+      });
 
-  //   return () => unsuscribe();
-  // }, []);
+      setMuscles(firestoreMuscles);
+    });
+
+    return () => unsuscribe();
+  }, []);
 
   async function handleClearMuscle() {
     confirm("Are you sure you want to clear all muscle groups?")
@@ -120,55 +125,99 @@ export const MuscleProvider = ({ children }) => {
       : null;
   }
 
-  function handleDeleteMuscle(id) {
-    const confirmDeleteMuscle = confirm(
-      "Are you sure you want to delete this muscle group?"
-    );
-    if (!confirmDeleteMuscle) return;
-    setMuscles(muscles.filter((m) => m.createAt !== id));
+  async function handleDeleteMuscle(id) {
+    console.log(id);
+    try {
+      const confirmDeleteMuscle = confirm(
+        "Are you sure you want to delete this muscle group?"
+      );
+      if (!confirmDeleteMuscle) return;
+      await deleteDoc(doc(db, "muscles1", id));
+      setMuscles([]);
+    } catch (error) {
+      console.log(error);
+    }
+
+    //setMuscles(muscles.filter((m) => m.createAt !== id));
   }
 
-  function handleAddExercise(muscleId) {
-    setMuscles(
-      muscles.map((m) =>
-        m.id === muscleId
-          ? {
-              ...m,
-              exercises: [
-                ...m.exercises,
-                {
-                  id: new Date().getTime(),
-                  exercise: "",
-                  sets: "",
-                  reps: "",
-                  mySets: [
-                    {
-                      id: new Date().getTime(),
-                      set: "",
-                      weight: "",
-                    },
-                  ],
-                },
-              ],
-            }
-          : m
-      )
-    );
+  async function handleAddExercise(muscleId) {
+    console.log(muscleId);
+    try {
+      await updateDoc(doc(db, "muscles1", muscleId), {
+        exercises: arrayUnion({
+          id: new Date().getTime(),
+          exercise: "",
+          sets: "",
+          reps: "",
+          mySets: [
+            {
+              id: new Date().getTime(),
+              set: "",
+              weight: "",
+            },
+          ],
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+    // setMuscles(
+    //   muscles.map((m) =>
+    //     m.id === muscleId
+    //       ? {
+    //           ...m,
+    //           exercises: [
+    //             ...m.exercises,
+    //             {
+    //               id: new Date().getTime(),
+    //               exercise: "",
+    //               sets: "",
+    //               reps: "",
+    //               mySets: [
+    //                 {
+    //                   id: new Date().getTime(),
+    //                   set: "",
+    //                   weight: "",
+    //                 },
+    //               ],
+    //             },
+    //           ],
+    //         }
+    //       : m
+    //   )
+    // );
   }
 
-  function handleChangeExercise(muscleId, nextExercise) {
-    setMuscles(
-      muscles.map((m) => ({
-        ...m,
-        exercises: m.exercises.map((e) => ({
-          ...e,
-          exercise:
-            e.id === nextExercise.id ? nextExercise.exercise : e.exercise,
-          sets: e.id === nextExercise.id ? nextExercise.sets : e.sets,
-          reps: e.id === nextExercise.id ? nextExercise.reps : e.reps,
-        })),
-      }))
-    );
+  async function handleChangeExercise(muscleId, nextExercise) {
+    console.log(nextExercise);
+
+    try {
+      const exerciseRef = doc(db, "muscles1", muscleId);
+      const updateFields = {
+        exercise: nextExercise.exercise,
+        sets: nextExercise.sets,
+        reps: nextExercise.reps,
+      };
+
+      await updateDoc(exerciseRef, updateFields);
+    } catch (error) {
+      console.log(error);
+    }
+
+    // setMuscles(
+    //   muscles.map((m) => ({
+    //     ...m,
+    //     exercises: m.exercises.map((e) => ({
+    //       ...e,
+    //       exercise:
+    //         e.id === nextExercise.id ? nextExercise.exercise : e.exercise,
+    //       sets: e.id === nextExercise.id ? nextExercise.sets : e.sets,
+    //       reps: e.id === nextExercise.id ? nextExercise.reps : e.reps,
+    //     })),
+    //   }))
+    // );
   }
 
   function handleChangeSets(muscleId, nextSet) {
@@ -237,21 +286,35 @@ export const MuscleProvider = ({ children }) => {
     );
   }
 
-  function handleDeleteExercise(muscleId, exerciseId) {
-    const confirmDeleteExercise = confirm(
-      "Are you sure you want to delete this exercise?"
-    );
-    if (!confirmDeleteExercise) return;
-    setMuscles(
-      muscles.map((m) =>
-        m.id === muscleId
-          ? {
-              ...m,
-              exercises: m.exercises.filter((e) => e.id !== exerciseId),
-            }
-          : m
-      )
-    );
+  async function handleDeleteExercise(muscleId, exerciseId) {
+    console.log(muscleId, exerciseId);
+
+    try {
+      const confirmDeleteExercise = confirm(
+        "Are you sure you want to delete this exercise?"
+      );
+      if (!confirmDeleteExercise) return;
+      const documentRef = doc(db, "muscles1", muscleId);
+      const workoutDocSnapshot = await getDoc(documentRef);
+      const exercises = workoutDocSnapshot.data().exercises;
+      const index = exercises.findIndex((e) => e.id === exerciseId);
+      await updateDoc(documentRef, {
+        exercises: arrayRemove(exercises[index]),
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+    // setMuscles(
+    //   muscles.map((m) =>
+    //     m.id === muscleId
+    //       ? {
+    //           ...m,
+    //           exercises: m.exercises.filter((e) => e.id !== exerciseId),
+    //         }
+    //       : m
+    //   )
+    // );
   }
 
   return (

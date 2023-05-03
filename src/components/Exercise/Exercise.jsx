@@ -15,11 +15,13 @@ export const Exercise = ({ exercise, muscleId }) => {
   const { handleDeleteExercise, handleChangeExercise, handleAddSet } =
     useMuscleContext();
 
+  console.log(exercise);
+
   let todoContent;
   if (isEditing) {
     todoContent = (
       <>
-        <section className="flex flex-col   gap-2  py-5 px-2 ">
+        <section className="flex flex-col   gap-2  py-5 px-2  border-b-2">
           <div className="flex  justify-start gap-10">
             <button
               onClick={() => handleAddSet(muscleId, exercise.id)}
@@ -40,7 +42,7 @@ export const Exercise = ({ exercise, muscleId }) => {
               <FontAwesomeIcon icon={faTrash} />
             </button>
           </div>
-          <div className="grid grid-cols-3 justify-start pb-5 items-center border-b-2">
+          <div className="grid grid-cols-3 justify-start pb-5 items-center ">
             <label htmlFor={exercise.exercise}>
               <p className="text-base font-bold">Exercise</p>
               <input

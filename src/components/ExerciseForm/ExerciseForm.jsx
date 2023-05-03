@@ -1,4 +1,3 @@
-import { useMuscleContext } from "../../hooks/useMuscleContext";
 import { Exercise } from "../Exercise/Exercise";
 
 export const ExerciseForm = ({ exercises, muscleId }) => {

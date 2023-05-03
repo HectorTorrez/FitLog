@@ -21,7 +21,7 @@ export const ExerciseCard = () => {
           <div className="flex gap-3 items-center justify-around m-auto border-b-2 pb-5 py-5 bg-gray-100">
             <button
               className=" text-blue-500 hover:text-blue-700 text-3xl font-bold   rounded focus:outline-none focus:shadow-outline"
-              onClick={() => handleAddExercise(muscle.id)}
+              onClick={() => handleAddExercise(muscle.newID)}
             >
               <FontAwesomeIcon icon={faDumbbell} />
             </button>
@@ -41,13 +41,16 @@ export const ExerciseCard = () => {
             </h2> */}
             <button
               className="text-red-500 hover:text-red-700 text-3xl"
-              onClick={() => handleDeleteMuscle(muscle.createAt)}
+              onClick={() => handleDeleteMuscle(muscle.newID)}
             >
               <FontAwesomeIcon icon={faTrash} />
             </button>
           </div>
           <section>
-            <ExerciseForm exercises={muscle.exercises} muscleId={muscle.id} />
+            <ExerciseForm
+              exercises={muscle.exercises}
+              muscleId={muscle.newID}
+            />
           </section>
         </section>
       ))}
