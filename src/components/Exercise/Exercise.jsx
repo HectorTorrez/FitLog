@@ -8,14 +8,36 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { MySets } from "../MySets/MySets";
+import { arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { db } from "../../firebase";
 
 export const Exercise = ({ exercise, muscleId }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [inputExercise, setInputExercise] = useState("");
+  const [sets, setSets] = useState("");
+  const [reps, setReps] = useState("");
 
-  const { handleDeleteExercise, handleChangeExercise, handleAddSet } =
+  const { handleDeleteExercise, handleAddSet, handleEditExercise } =
     useMuscleContext();
 
-  console.log(exercise);
+  const updateExercise = async () => {
+    const musclesRef = doc(db, "muscles1", muscleId);
+    await updateDoc(musclesRef, {
+      exercises: arrayUnion({
+        id: exercise.id,
+        exercise: inputExercise,
+        sets: sets,
+        reps: reps,
+        MySets: [
+          {
+            id: new Date().getTime() * 10,
+            set: "",
+            weight: "",
+          },
+        ],
+      }),
+    });
+  };
 
   let todoContent;
   if (isEditing) {
@@ -31,7 +53,7 @@ export const Exercise = ({ exercise, muscleId }) => {
             </button>
             <button
               className=" text-blue-500 font-bold py-1 px-1 rounded focus:outline-none focus:shadow-outline "
-              onClick={() => setIsEditing(false)}
+              onClick={() => updateExercise()}
             >
               <FontAwesomeIcon icon={faFloppyDisk} />
             </button>
@@ -51,13 +73,8 @@ export const Exercise = ({ exercise, muscleId }) => {
                 maxLength={15}
                 type="text"
                 name={exercise.exercise}
-                value={exercise.exercise}
-                onChange={(e) =>
-                  handleChangeExercise(muscleId, {
-                    ...exercise,
-                    exercise: e.target.value,
-                  })
-                }
+                value={inputExercise}
+                onChange={(e) => setInputExercise(e.target.value)}
               ></input>
             </label>
 
@@ -68,13 +85,8 @@ export const Exercise = ({ exercise, muscleId }) => {
         text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text"
                 name={exercise.set}
-                value={exercise.sets}
-                onChange={(e) =>
-                  handleChangeExercise(muscleId, {
-                    ...exercise,
-                    sets: e.target.value,
-                  })
-                }
+                value={sets}
+                onChange={(e) => setSets(e.target.value)}
               ></input>
             </label>
 
@@ -85,13 +97,8 @@ export const Exercise = ({ exercise, muscleId }) => {
         text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text"
                 name={exercise.reps}
-                value={exercise.reps}
-                onChange={(e) =>
-                  handleChangeExercise(muscleId, {
-                    ...exercise,
-                    reps: e.target.value,
-                  })
-                }
+                value={reps}
+                onChange={(e) => setReps(e.target.value)}
               ></input>
             </label>
           </div>

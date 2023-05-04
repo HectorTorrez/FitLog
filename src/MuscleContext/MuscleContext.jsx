@@ -12,6 +12,7 @@ import {
   onSnapshot,
   orderBy,
   query,
+  refEqual,
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
@@ -190,35 +191,53 @@ export const MuscleProvider = ({ children }) => {
     // );
   }
 
-  async function handleChangeExercise(muscleId, nextExercise) {
-    console.log(nextExercise);
+  // async function handleEditExercise(
+  //   exercise,
+  //   reps = "",
+  //   sets = "",
+  //   exerciseId
+  // ) {
+  //   console.log(exercise, reps, sets, exerciseId);
+  //   const updateData = { ...muscles };
+  //   const setIndex = updateData.exercises[exerciseId].findIndex(
+  //     (exercises) => exercises.id === exerciseId
+  //   );
 
-    try {
-      const exerciseRef = doc(db, "muscles1", muscleId);
-      const updateFields = {
-        exercise: nextExercise.exercise,
-        sets: nextExercise.sets,
-        reps: nextExercise.reps,
-      };
+  //   updateData.exercises[setIndex].exercise = {
+  //     id: exerciseId,
+  //     exercise: exercise,
+  //     reps: reps,
+  //     sets: sets,
+  //   };
 
-      await updateDoc(exerciseRef, updateFields);
-    } catch (error) {
-      console.log(error);
-    }
+  //   setMuscles(updateData);
+  // }
 
-    // setMuscles(
-    //   muscles.map((m) => ({
-    //     ...m,
-    //     exercises: m.exercises.map((e) => ({
-    //       ...e,
-    //       exercise:
-    //         e.id === nextExercise.id ? nextExercise.exercise : e.exercise,
-    //       sets: e.id === nextExercise.id ? nextExercise.sets : e.sets,
-    //       reps: e.id === nextExercise.id ? nextExercise.reps : e.reps,
-    //     })),
-    //   }))
-    // );
-  }
+  // async function handleChangeExercise(muscleId, nextExercise) {
+  //   try {
+  //     const exerciseRef = doc(db, "muscles1", muscleId);
+  //     const updateFields = {
+  //       exercise: nextExercise.exercise,
+  //       sets: nextExercise.sets,
+  //       reps: nextExercise.reps,
+  //     };
+  //     await updateDoc(exerciseRef, updateFields);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  //   setMuscles(
+  //     muscles.map((m) => ({
+  //       ...m,
+  //       exercises: m.exercises.map((e) => ({
+  //         ...e,
+  //         exercise:
+  //           e.id === nextExercise.id ? nextExercise.exercise : e.exercise,
+  //         sets: e.id === nextExercise.id ? nextExercise.sets : e.sets,
+  //         reps: e.id === nextExercise.id ? nextExercise.reps : e.reps,
+  //       })),
+  //     }))
+  //   );
+  // }
 
   function handleChangeSets(muscleId, nextSet) {
     setMuscles(
@@ -325,11 +344,12 @@ export const MuscleProvider = ({ children }) => {
         setMuscles,
         handleDeleteMuscle,
         handleAddMuscle,
+        // handleEditExercise,
         // handleEditMuscle,
         handleClearMuscle,
         handleAddExercise,
         handleDeleteExercise,
-        handleChangeExercise,
+        // handleChangeExercise,
         handleChangeSets,
         handleAddSet,
         handleDeleteSet,
