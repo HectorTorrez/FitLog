@@ -8,7 +8,7 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { MySets } from "../MySets/MySets";
-import { arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 
 export const Exercise = ({ exercise, muscleId }) => {
@@ -16,27 +16,34 @@ export const Exercise = ({ exercise, muscleId }) => {
   const [inputExercise, setInputExercise] = useState("");
   const [sets, setSets] = useState("");
   const [reps, setReps] = useState("");
+  const [inputSet, setInputSet] = useState("");
+  const [inputWeight, setInputWeight] = useState("");
 
-  const { handleDeleteExercise, handleAddSet, handleEditExercise } =
-    useMuscleContext();
+  const { handleDeleteExercise, handleAddSet } = useMuscleContext();
 
   const updateExercise = async () => {
-    const musclesRef = doc(db, "muscles1", muscleId);
-    await updateDoc(musclesRef, {
-      exercises: arrayUnion({
-        id: exercise.id,
-        exercise: inputExercise,
-        sets: sets,
-        reps: reps,
-        MySets: [
+    try {
+      const musclesRef = doc(db, "muscles1", muscleId);
+      await updateDoc(musclesRef, {
+        exercises: [
           {
-            id: new Date().getTime() * 10,
-            set: "",
-            weight: "",
+            id: new Date().getTime(),
+            exercise: inputExercise,
+            sets: sets,
+            reps: reps,
+            mySets: [
+              {
+                id: new Date().getTime(),
+                set: inputSet,
+                weight: inputWeight,
+              },
+            ],
           },
         ],
-      }),
-    });
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   let todoContent;
@@ -53,13 +60,19 @@ export const Exercise = ({ exercise, muscleId }) => {
             </button>
             <button
               className=" text-blue-500 font-bold py-1 px-1 rounded focus:outline-none focus:shadow-outline "
-              onClick={() => updateExercise()}
+              onClick={updateExercise}
             >
               <FontAwesomeIcon icon={faFloppyDisk} />
             </button>
             <button
+              className="text-yellow-600 font-bold py-1 px-1 rounded   "
+              onClick={() => setIsEditing(false)}
+            >
+              <FontAwesomeIcon icon={faPenToSquare} />
+            </button>
+            <button
               onClick={() => handleDeleteExercise(muscleId, exercise.id)}
-              className=" text-red-500 font-bold py-1 px-1 rounded grid-"
+              className=" text-red-500 font-bold py-1 px-1 rounded grid"
             >
               <FontAwesomeIcon icon={faTrash} />
             </button>
@@ -72,6 +85,7 @@ export const Exercise = ({ exercise, muscleId }) => {
           text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 maxLength={15}
                 type="text"
+                placeholder={exercise.exercise}
                 name={exercise.exercise}
                 value={inputExercise}
                 onChange={(e) => setInputExercise(e.target.value)}
@@ -109,6 +123,10 @@ export const Exercise = ({ exercise, muscleId }) => {
               exercise={exercise}
               exerciseId={exercise.id}
               isEditing={isEditing}
+              setInputSet={setInputSet}
+              inputSet={inputSet}
+              inputWeight={inputWeight}
+              setInputWeight={setInputWeight}
             />
           </div>
         </section>
@@ -160,6 +178,8 @@ export const Exercise = ({ exercise, muscleId }) => {
               exercise={exercise}
               exerciseId={exercise.id}
               isEditing={isEditing}
+              setInputSet={setInputSet}
+              inputSet={inputSet}
             />
           </div>
         </section>

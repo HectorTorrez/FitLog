@@ -26,7 +26,6 @@ export const MuscleProvider = ({ children }) => {
   const [toggle, setToggle] = useState(false);
 
   const [addMuscleError, setAddMuscleError] = useState(null);
-
   const muscleRef = collection(db, "muscles1");
 
   async function handleAddMuscle(muscle) {
@@ -143,7 +142,6 @@ export const MuscleProvider = ({ children }) => {
   }
 
   async function handleAddExercise(muscleId) {
-    console.log(muscleId);
     try {
       await updateDoc(doc(db, "muscles1", muscleId), {
         exercises: arrayUnion({
@@ -239,75 +237,103 @@ export const MuscleProvider = ({ children }) => {
   //   );
   // }
 
-  function handleChangeSets(muscleId, nextSet) {
-    setMuscles(
-      muscles.map((m) => ({
-        ...m,
-        exercises: m.exercises.map((e) => ({
-          ...e,
-          mySets: e.mySets.map((s) => ({
-            ...s,
-            set: s.id === nextSet.id ? nextSet.set : s.set,
-            weight: s.id === nextSet.id ? nextSet.weight : s.weight,
-          })),
-        })),
-      }))
-    );
+  // function handleChangeSets(muscleId, nextSet) {
+  //   setMuscles(
+  //     muscles.map((m) => ({
+  //       ...m,
+  //       exercises: m.exercises.map((e) => ({
+  //         ...e,
+  //         mySets: e.mySets.map((s) => ({
+  //           ...s,
+  //           set: s.id === nextSet.id ? nextSet.set : s.set,
+  //           weight: s.id === nextSet.id ? nextSet.weight : s.weight,
+  //         })),
+  //       })),
+  //     }))
+  //   );
+  // }
+
+  async function handleAddSet(muscleId, exerciseId) {
+    console.log(muscleId, exerciseId);
+    try {
+      const convertToString = exerciseId.toString();
+      await updateDoc(doc(db, "muscles1", muscleId), [
+        {
+          "exercises.mySets": arrayUnion({
+            id: new Date().getTime(),
+            set: "",
+            weight: "",
+          }),
+        },
+      ]);
+    } catch (error) {
+      console.log(error);
+    }
+
+    // setMuscles(
+    //   muscles.map((m) =>
+    //     m.id === muscleId
+    //       ? {
+    //           ...m,
+
+    //           exercises: m.exercises.map((e) => {
+    //             if (e.id === exerciseId) {
+    //               return {
+    //                 ...e,
+    //                 mySets: [
+    //                   ...e.mySets,
+    //                   {
+    //                     id: new Date().getTime(),
+    //                     set: "",
+    //                     weight: "",
+    //                   },
+    //                 ],
+    //               };
+    //             } else {
+    //               return e;
+    //             }
+    //           }),
+    //         }
+    //       : m
+    //   )
+    // );
   }
 
-  function handleAddSet(muscleId, exerciseId) {
-    setMuscles(
-      muscles.map((m) =>
-        m.id === muscleId
-          ? {
-              ...m,
+  async function handleDeleteSet(muscleId, exerciseId, setId) {
+    console.log(setId);
+    try {
+      const confirmDeleteSet = confirm(
+        "Are you sure you want to delete this set?"
+      );
+      if (!confirmDeleteSet) return;
+      const documentRef = doc(db, "muscles1", muscleId);
+      const workoutDocSnapshot = await getDoc(documentRef);
+      const exercises = workoutDocSnapshot.data().exercises;
+      const exerciseIndex = exercises.findIndex((e) => e.id === exerciseId);
+      const mySets = exercises[exerciseIndex].mySets;
+      const setIndex = mySets.findIndex((s) => s.id === setId);
+      mySets.splice(setIndex, 1);
+      await updateDoc(documentRef, { exercises });
+    } catch (error) {
+      console.log(error);
+    }
 
-              exercises: m.exercises.map((e) => {
-                if (e.id === exerciseId) {
-                  return {
-                    ...e,
-                    mySets: [
-                      ...e.mySets,
-                      {
-                        id: new Date().getTime(),
-                        set: "",
-                        weight: "",
-                      },
-                    ],
-                  };
-                } else {
-                  return e;
-                }
-              }),
-            }
-          : m
-      )
-    );
-  }
-
-  function handleDeleteSet(muscleId, setId) {
-    const confirmDeleteSet = confirm(
-      "Are you sure you want to delete this set?"
-    );
-    if (!confirmDeleteSet) return;
-    setMuscles(
-      muscles.map((m) =>
-        m.id === muscleId
-          ? {
-              ...m,
-              exercises: m.exercises.map((e) => ({
-                ...e,
-                mySets: e.mySets.filter((s) => s.id !== setId),
-              })),
-            }
-          : m
-      )
-    );
+    // setMuscles(
+    //   muscles.map((m) =>
+    //     m.id === muscleId
+    //       ? {
+    //           ...m,
+    //           exercises: m.exercises.map((e) => ({
+    //             ...e,
+    //             mySets: e.mySets.filter((s) => s.id !== setId),
+    //           })),
+    //         }
+    //       : m
+    //   )
+    // );
   }
 
   async function handleDeleteExercise(muscleId, exerciseId) {
-    console.log(muscleId, exerciseId);
-
     try {
       const confirmDeleteExercise = confirm(
         "Are you sure you want to delete this exercise?"
@@ -350,7 +376,7 @@ export const MuscleProvider = ({ children }) => {
         handleAddExercise,
         handleDeleteExercise,
         // handleChangeExercise,
-        handleChangeSets,
+        // handleChangeSets,
         handleAddSet,
         handleDeleteSet,
       }}

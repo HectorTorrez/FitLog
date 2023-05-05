@@ -1,14 +1,25 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { useMuscleContext } from "../../hooks/useMuscleContext";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export const Sets = ({ set, isEditing, muscleId }) => {
+export const Sets = ({
+  set,
+  isEditing,
+  muscleId,
+  setInputSet,
+  inputSet,
+  inputWeight,
+  setInputWeight,
+  exerciseId,
+}) => {
   const { handleChangeSets, handleDeleteSet } = useMuscleContext();
+
   let setContent;
   if (isEditing) {
     setContent = (
       <section key={set.id} className="grid grid-cols-3 items-end ">
+        <button onClick={() => updateExercise()}>save</button>
         <label htmlFor="set">
           <p className="text-base font-bold">Set</p>
 
@@ -16,14 +27,9 @@ export const Sets = ({ set, isEditing, muscleId }) => {
             className="w-8 shadow appearance-none border rounded p-1
             text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
-            value={set.set}
+            value={inputSet}
             name={set.id}
-            onChange={(e) => {
-              handleChangeSets(set, {
-                ...set,
-                set: e.target.value,
-              });
-            }}
+            onChange={(e) => setInputSet(e.target.value)}
           />
         </label>
         <label htmlFor="weight">
@@ -33,18 +39,13 @@ export const Sets = ({ set, isEditing, muscleId }) => {
             className="w-16 shadow appearance-none border rounded p-1
             text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
-            value={set.weight}
+            value={inputWeight}
             name={set.id}
-            onChange={(e) => {
-              handleChangeSets(set, {
-                ...set,
-                weight: e.target.value,
-              });
-            }}
+            onChange={(e) => setInputWeight(e.target.value)}
           />
         </label>
         <button
-          onClick={() => handleDeleteSet(muscleId, set.id)}
+          onClick={() => handleDeleteSet(muscleId, exerciseId, set.id)}
           className=" text-red-500 font-bold py-1 px-1 rounded"
         >
           <FontAwesomeIcon icon={faTrash} />
@@ -62,7 +63,7 @@ export const Sets = ({ set, isEditing, muscleId }) => {
             Lb <span className="block font-normal ">{set.weight}</span>
           </p>
           <button
-            onClick={() => handleDeleteSet(muscleId, set.id)}
+            onClick={() => handleDeleteSet(muscleId, exerciseId, set.id)}
             className=" text-red-500 font-bold py-1 px-1 rounded"
           >
             <FontAwesomeIcon icon={faTrash} />
