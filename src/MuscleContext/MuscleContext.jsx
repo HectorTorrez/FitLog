@@ -4,15 +4,12 @@ import {
   arrayUnion,
   collection,
   deleteDoc,
-  deleteField,
   doc,
   getDoc,
-  getDocs,
   limit,
   onSnapshot,
   orderBy,
   query,
-  refEqual,
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
@@ -145,13 +142,13 @@ export const MuscleProvider = ({ children }) => {
     try {
       await updateDoc(doc(db, "muscles1", muscleId), {
         exercises: arrayUnion({
-          id: new Date().getTime(),
+          id: new Date().getTime().toString(),
           exercise: "",
           sets: "",
           reps: "",
           mySets: [
             {
-              id: new Date().getTime(),
+              id: new Date().getTime().toString(),
               set: "",
               weight: "",
             },
@@ -255,17 +252,25 @@ export const MuscleProvider = ({ children }) => {
 
   async function handleAddSet(muscleId, exerciseId) {
     console.log(muscleId, exerciseId);
+    let newValues = [];
+    const values = muscles.map((m) =>
+      m.exercises.map((e) => newValues.push(e))
+    );
+
     try {
-      const convertToString = exerciseId.toString();
-      await updateDoc(doc(db, "muscles1", muscleId), [
-        {
-          "exercises.mySets": arrayUnion({
-            id: new Date().getTime(),
-            set: "",
-            weight: "",
-          }),
-        },
-      ]);
+      const exerciseRef = doc(db, "muscles1", muscleId);
+      await updateDoc(
+        exerciseRef,
+        doc("exercises", exerciseId)[
+          {
+            mySets: arrayUnion({
+              id: new Date().getTime().toString(),
+              set: "",
+              weight: "",
+            }),
+          }
+        ]
+      );
     } catch (error) {
       console.log(error);
     }
