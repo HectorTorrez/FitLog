@@ -13,12 +13,12 @@ export const MuscleTitle = ({
   if (isMuscleEditing) {
     muscleContent = (
       <>
-        <button
+        {/* <button
           className=" text-blue-500 font-bold py-1 px-1 rounded focus:outline-none focus:shadow-outline "
-          // onClick={() => setIsMuscleEditing(false)}
+           onClick={() => setIsMuscleEditing(false)}
         >
           <FontAwesomeIcon icon={faFloppyDisk} />
-        </button>
+        </button> */}
 
         <input
           type="text"
@@ -35,12 +35,12 @@ export const MuscleTitle = ({
   } else {
     muscleContent = (
       <>
-        <button
+        {/* <button
           className="text-yellow-600 font-bold py-1 px-1 rounded   "
-          // onClick={() => setIsMuscleEditing(true)}
+           onClick={() => setIsMuscleEditing(true)}
         >
           <FontAwesomeIcon icon={faPenToSquare} />
-        </button>
+        </button> */}
         <h2
           //   onClick={() => handleToggleMuscle(muscle.id)}
           className="text-4xl font-bold w-52"

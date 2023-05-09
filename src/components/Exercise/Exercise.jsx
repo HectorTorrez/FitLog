@@ -8,7 +8,7 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { MySets } from "../MySets/MySets";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 
 export const Exercise = ({ exercise, muscleId }) => {
@@ -24,6 +24,7 @@ export const Exercise = ({ exercise, muscleId }) => {
   const updateExercise = async () => {
     try {
       const musclesRef = doc(db, "muscles1", muscleId);
+
       await updateDoc(musclesRef, {
         exercises: [
           {
@@ -44,6 +45,7 @@ export const Exercise = ({ exercise, muscleId }) => {
     } catch (error) {
       console.log(error);
     }
+    return () => unsuscribe();
   };
 
   let todoContent;
@@ -51,7 +53,7 @@ export const Exercise = ({ exercise, muscleId }) => {
     todoContent = (
       <>
         <section className="flex flex-col   gap-2  py-5 px-2  border-b-2">
-          <div className="flex  justify-start gap-10">
+          <div className="flex  justify-center mb-5 gap-10">
             <button
               onClick={() => handleAddSet(muscleId, exercise.id)}
               className=" text-blue-500  py-1 px-1 font-bold   rounded focus:outline-none focus:shadow-outline"
@@ -72,7 +74,7 @@ export const Exercise = ({ exercise, muscleId }) => {
             </button>
             <button
               onClick={() => handleDeleteExercise(muscleId, exercise.id)}
-              className=" text-red-500 font-bold py-1 px-1 rounded grid"
+              className=" text-red-500 font-bold  rounded "
             >
               <FontAwesomeIcon icon={faTrash} />
             </button>

@@ -10,16 +10,18 @@ export const Navbar = () => {
   };
 
   return (
-    <header className="flex justify-end m-auto pt-3 max-w-6xl ">
-      <nav className="w-52 flex  justify-around">
-        <ul>
-          <li className="flex items-end gap-3">
+    <header className="flex   align-middle justify-end mt-4 m-auto    font-bold w-auto max-w-6xl ">
+      <nav className="w-auto flex gap-5 mr-3   px-10 py-2 rounded  justify-around">
+        <ul className="flex gap-5 items-center text-xl">
+          <li className="flex items-center gap-3">
             {user?.displayName || user?.email}
           </li>
+          <li>
+            <button onClick={handleLogout} className="flex items-center gap-3 ">
+              <FontAwesomeIcon icon={faRightFromBracket} className=" h-4.2  " />
+            </button>
+          </li>
         </ul>
-        <button onClick={handleLogout} className="flex items-center gap-3">
-          Logout <FontAwesomeIcon icon={faRightFromBracket} />
-        </button>
       </nav>
     </header>
   );

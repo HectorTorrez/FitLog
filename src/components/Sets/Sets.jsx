@@ -19,7 +19,6 @@ export const Sets = ({
   if (isEditing) {
     setContent = (
       <section key={set.id} className="grid grid-cols-3 items-end ">
-        <button onClick={() => updateExercise()}>save</button>
         <label htmlFor="set">
           <p className="text-base font-bold">Set</p>
 
@@ -64,7 +63,7 @@ export const Sets = ({
           </p>
           <button
             onClick={() => handleDeleteSet(muscleId, exerciseId, set.id)}
-            className=" text-red-500 font-bold py-1 px-1 rounded"
+            className=" text-red-500 font-bold  rounded"
           >
             <FontAwesomeIcon icon={faTrash} />
           </button>

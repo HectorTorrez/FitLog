@@ -130,7 +130,6 @@ export const MuscleProvider = ({ children }) => {
       );
       if (!confirmDeleteMuscle) return;
       await deleteDoc(doc(db, "muscles1", id));
-      setMuscles([]);
     } catch (error) {
       console.log(error);
     }
@@ -252,25 +251,28 @@ export const MuscleProvider = ({ children }) => {
 
   async function handleAddSet(muscleId, exerciseId) {
     console.log(muscleId, exerciseId);
-    let newValues = [];
-    const values = muscles.map((m) =>
-      m.exercises.map((e) => newValues.push(e))
-    );
 
     try {
       const exerciseRef = doc(db, "muscles1", muscleId);
-      await updateDoc(
-        exerciseRef,
-        doc("exercises", exerciseId)[
-          {
-            mySets: arrayUnion({
+      // const docSnapshot = await getDoc(exerciseRef);
+      exerciseRef.get().then((doc) => {
+        if (doc.exists()) {
+          const objetoEjercicio = doc
+            .data()
+            .exercises.find((e) => e.id === exerciseId);
+          if (objetoEjercicio) {
+            const newSet = {
               id: new Date().getTime().toString(),
               set: "",
               weight: "",
-            }),
+            };
+
+            updateDoc(exerciseRef, {
+              [docSnapshot.data().exercises]: arrayUnion(newSet),
+            });
           }
-        ]
-      );
+        }
+      });
     } catch (error) {
       console.log(error);
     }
@@ -303,6 +305,8 @@ export const MuscleProvider = ({ children }) => {
     //   )
     // );
   }
+
+  console.log(muscles);
 
   async function handleDeleteSet(muscleId, exerciseId, setId) {
     console.log(setId);

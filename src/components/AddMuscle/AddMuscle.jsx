@@ -34,7 +34,7 @@ export const AddMuscle = () => {
         </div>
       )} */}
 
-      <h1 className="text-2xl text-gray-700 font-bold mb-2" htmlFor="">
+      <h1 className="text-5xl text-gray-700 font-bold mb-2" htmlFor="">
         WorkoutLog
       </h1>
       <input
