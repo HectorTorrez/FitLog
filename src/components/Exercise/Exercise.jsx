@@ -8,20 +8,42 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { MySets } from "../MySets/MySets";
-import { doc, onSnapshot, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 
-export const Exercise = ({ exercise, muscleId }) => {
+export const Exercise = ({ exercise, muscleId, updateExercise }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [inputExercise, setInputExercise] = useState("");
-  const [sets, setSets] = useState("");
-  const [reps, setReps] = useState("");
-  const [inputSet, setInputSet] = useState("");
-  const [inputWeight, setInputWeight] = useState("");
+  const [inputExercise, setInputExercise] = useState(exercise.exercise);
+  const [sets, setSets] = useState(exercise.sets);
+  const [reps, setReps] = useState(exercise.reps);
 
   const { handleDeleteExercise, handleAddSet } = useMuscleContext();
 
-  const updateExercise = async () => {
+  const handleUpdateExercise = () => {
+    updateExercise({
+      id: exercise.id,
+      exercise: inputExercise,
+      sets: sets,
+      reps: reps,
+      mySets: [...exercise.mySets],
+    });
+    setIsEditing(false);
+  };
+
+  const updateSet = async (newSet) => {
+    const newObjet = {
+      id: newSet.setId,
+      set: newSet.inputSet,
+      weight: newSet.inputWeight,
+    };
+
+    const updateSet = exercise.mySets.map((set) => {
+      if (set.id === newSet.setId) {
+        return newObjet;
+      }
+      return set;
+    });
+
     try {
       const musclesRef = doc(db, "muscles1", muscleId);
 
@@ -32,20 +54,13 @@ export const Exercise = ({ exercise, muscleId }) => {
             exercise: inputExercise,
             sets: sets,
             reps: reps,
-            mySets: [
-              {
-                id: new Date().getTime(),
-                set: inputSet,
-                weight: inputWeight,
-              },
-            ],
+            mySets: updateSet,
           },
         ],
       });
     } catch (error) {
       console.log(error);
     }
-    return () => unsuscribe();
   };
 
   let todoContent;
@@ -62,7 +77,7 @@ export const Exercise = ({ exercise, muscleId }) => {
             </button>
             <button
               className=" text-blue-500 font-bold py-1 px-1 rounded focus:outline-none focus:shadow-outline "
-              onClick={updateExercise}
+              onClick={handleUpdateExercise}
             >
               <FontAwesomeIcon icon={faFloppyDisk} />
             </button>
@@ -120,15 +135,11 @@ export const Exercise = ({ exercise, muscleId }) => {
           </div>
           <div className="grid grid-cols-2 gap-3  justify-start">
             <MySets
-              key={exercise.id}
               muscleId={muscleId}
-              exercise={exercise}
+              exercise={exercise.mySets}
               exerciseId={exercise.id}
               isEditing={isEditing}
-              setInputSet={setInputSet}
-              inputSet={inputSet}
-              inputWeight={inputWeight}
-              setInputWeight={setInputWeight}
+              updateSet={updateSet}
             />
           </div>
         </section>
@@ -177,11 +188,9 @@ export const Exercise = ({ exercise, muscleId }) => {
             <MySets
               key={exercise.id}
               muscleId={muscleId}
-              exercise={exercise}
+              exercise={exercise.mySets}
               exerciseId={exercise.id}
-              isEditing={isEditing}
-              setInputSet={setInputSet}
-              inputSet={inputSet}
+              updateSet={updateSet}
             />
           </div>
         </section>

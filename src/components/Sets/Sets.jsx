@@ -1,19 +1,44 @@
 import { Fragment, useState } from "react";
 import { useMuscleContext } from "../../hooks/useMuscleContext";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faFloppyDisk, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export const Sets = ({
-  set,
-  isEditing,
-  muscleId,
-  setInputSet,
-  inputSet,
-  inputWeight,
-  setInputWeight,
-  exerciseId,
-}) => {
+export const Sets = ({ set, isEditing, muscleId, exerciseId, updateSet }) => {
+  const [inputSet, setInputSet] = useState(set.set);
+  const [inputWeight, setInputWeight] = useState(set.weight);
+  const [setId, setSetId] = useState(set.id);
   const { handleChangeSets, handleDeleteSet } = useMuscleContext();
+
+  // const updateExercise = async () => {
+  //   try {
+  //     const musclesRef = doc(db, "muscles1", muscleId);
+
+  //     await updateDoc(musclesRef, {
+  //       exercises: [
+  //         {
+  //           id: new Date().getTime(),
+  //           exercise: inputExercise,
+  //           sets: sets,
+  //           reps: reps,
+  //           mySets: [
+  //             {
+  //               id: new Date().getTime(),
+  //               set: inputSet,
+  //               weight: inputWeight,
+  //             },
+  //           ],
+  //         },
+  //       ],
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  //   return () => unsuscribe();
+  // };
+
+  const handleSave = () => {
+    updateSet({ setId, inputSet, inputWeight });
+  };
 
   let setContent;
   if (isEditing) {
@@ -43,12 +68,21 @@ export const Sets = ({
             onChange={(e) => setInputWeight(e.target.value)}
           />
         </label>
-        <button
-          onClick={() => handleDeleteSet(muscleId, exerciseId, set.id)}
-          className=" text-red-500 font-bold py-1 px-1 rounded"
-        >
-          <FontAwesomeIcon icon={faTrash} />
-        </button>
+        <div>
+          <button
+            className=" text-blue-500 font-bold py-1 px-1 rounded focus:outline-none focus:shadow-outline "
+            onClick={handleSave}
+          >
+            <FontAwesomeIcon icon={faFloppyDisk} />
+          </button>
+
+          <button
+            onClick={() => handleDeleteSet(muscleId, exerciseId, set.id)}
+            className=" text-red-500 font-bold py-1 px-1 rounded"
+          >
+            <FontAwesomeIcon icon={faTrash} />
+          </button>
+        </div>
       </section>
     );
   } else {
@@ -61,12 +95,20 @@ export const Sets = ({
           <p className="text-base font-bold w-52">
             Lb <span className="block font-normal ">{set.weight}</span>
           </p>
-          <button
-            onClick={() => handleDeleteSet(muscleId, exerciseId, set.id)}
-            className=" text-red-500 font-bold  rounded"
-          >
-            <FontAwesomeIcon icon={faTrash} />
-          </button>
+          <div>
+            <button
+              className=" text-blue-500 font-bold py-1 px-1 rounded focus:outline-none focus:shadow-outline "
+              onClick={handleSave}
+            >
+              <FontAwesomeIcon icon={faFloppyDisk} />
+            </button>
+            <button
+              onClick={() => handleDeleteSet(muscleId, exerciseId, set.id)}
+              className=" text-red-500 font-bold  rounded"
+            >
+              <FontAwesomeIcon icon={faTrash} />
+            </button>
+          </div>
         </section>
       </Fragment>
     );

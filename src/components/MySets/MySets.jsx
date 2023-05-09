@@ -6,25 +6,19 @@ export const MySets = ({
   exercise,
   muscleId,
   isEditing,
-  setInputSet,
-  inputSet,
-  inputWeight,
-  setInputWeight,
   exerciseId,
+  updateSet,
 }) => {
   return (
     <>
-      {exercise?.mySets.map((set) => (
+      {exercise?.map((set) => (
         <Sets
           key={set.id}
           set={set}
           isEditing={isEditing}
           muscleId={muscleId}
-          setInputSet={setInputSet}
-          inputSet={inputSet}
-          inputWeight={inputWeight}
-          setInputWeight={setInputWeight}
           exerciseId={exerciseId}
+          updateSet={updateSet}
         />
       ))}
     </>
