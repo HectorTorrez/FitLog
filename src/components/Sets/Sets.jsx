@@ -9,35 +9,8 @@ export const Sets = ({ set, isEditing, muscleId, exerciseId, updateSet }) => {
   const [setId, setSetId] = useState(set.id);
   const { handleChangeSets, handleDeleteSet } = useMuscleContext();
 
-  // const updateExercise = async () => {
-  //   try {
-  //     const musclesRef = doc(db, "muscles1", muscleId);
-
-  //     await updateDoc(musclesRef, {
-  //       exercises: [
-  //         {
-  //           id: new Date().getTime(),
-  //           exercise: inputExercise,
-  //           sets: sets,
-  //           reps: reps,
-  //           mySets: [
-  //             {
-  //               id: new Date().getTime(),
-  //               set: inputSet,
-  //               weight: inputWeight,
-  //             },
-  //           ],
-  //         },
-  //       ],
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  //   return () => unsuscribe();
-  // };
-
   const handleSave = () => {
-    updateSet({ setId, inputSet, inputWeight });
+    updateSet({ setId, inputSet, inputWeight, exerciseId });
   };
 
   let setContent;

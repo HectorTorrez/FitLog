@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { useMuscleContext } from "../../hooks/useMuscleContext";
 import { Sets } from "../Sets/Sets";
 
 export const MySets = ({

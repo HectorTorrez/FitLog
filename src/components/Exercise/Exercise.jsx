@@ -8,7 +8,7 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { MySets } from "../MySets/MySets";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 
 export const Exercise = ({ exercise, muscleId, updateExercise }) => {
@@ -30,34 +30,41 @@ export const Exercise = ({ exercise, muscleId, updateExercise }) => {
     setIsEditing(false);
   };
 
-  const updateSet = async (newSet) => {
-    const newObjet = {
-      id: newSet.setId,
-      set: newSet.inputSet,
-      weight: newSet.inputWeight,
-    };
+  const updateSet = async (newSet, exerciseId) => {
+    // const updateSet = exercise.mySets.map((set) => {
+    //   if (set.id === newSet.setId) {
+    //     return newObjet;
+    //   }
+    //   return set;
+    // });
 
-    const updateSet = exercise.mySets.map((set) => {
-      if (set.id === newSet.setId) {
-        return newObjet;
-      }
-      return set;
-    });
+    //TODO: fix update set
 
     try {
+      const newObjet = {
+        id: newSet.setId,
+        set: newSet.inputSet,
+        weight: newSet.inputWeight,
+      };
       const musclesRef = doc(db, "muscles1", muscleId);
-
-      await updateDoc(musclesRef, {
-        exercises: [
-          {
-            id: new Date().getTime(),
-            exercise: inputExercise,
-            sets: sets,
-            reps: reps,
-            mySets: updateSet,
-          },
-        ],
+      const snapshot = await getDoc(musclesRef);
+      const muscle = snapshot.data();
+      const exercises = muscle.exercises.map((ex) => {
+        if (ex.id === exerciseId) {
+          const mySets = ex.mySets.map((set) => {
+            if (set.id === newSet.setId) {
+              return newObjet;
+            } else {
+              return set;
+            }
+          });
+          return { ...ex, mySets };
+        } else {
+          return ex;
+        }
       });
+      console.log(exercises);
+      await updateDoc(musclesRef, { exercises });
     } catch (error) {
       console.log(error);
     }

@@ -49,11 +49,6 @@ export const MuscleProvider = ({ children }) => {
                 set: "",
                 weight: "",
               },
-              {
-                id: new Date().getTime() * 10000 + 1,
-                set: "",
-                weight: "",
-              },
             ],
           },
         ],
@@ -271,22 +266,21 @@ export const MuscleProvider = ({ children }) => {
       weight: "",
     };
 
-    const findMuscle = muscles.filter((m) => m.newID === muscleId);
-
-    const updateExercise = findMuscle[0].exercises.map((m) => {
-      if (m.id === exerciseId) {
-        return [...m.mySets, newSet];
-      }
-      return m;
-    });
-
-    console.log(muscles);
     try {
       const musclesRef = doc(db, "muscles1", muscleId);
+      const snapshot = await getDoc(musclesRef);
+      const muscle = snapshot.data();
 
-      await updateDoc(musclesRef, {
-        exercises: updateExercise,
+      const exercises = muscle.exercises.map((exercise) => {
+        if (exercise.id === exerciseId) {
+          const mySets = [...exercise.mySets, newSet];
+          return { ...exercise, mySets };
+        } else {
+          return exercise;
+        }
       });
+
+      await updateDoc(musclesRef, { exercises });
     } catch (error) {
       console.log(error);
     }
