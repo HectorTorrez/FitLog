@@ -2,13 +2,13 @@ import { useState } from "react";
 import { ExerciseForm } from "../ExerciseForm/ExerciseForm";
 import { useMuscleContext } from "../../hooks/useMuscleContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDumbbell, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faDumbbell, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { MuscleTitle } from "../MuscleTitle/MuscleTitle";
 
 export const ExerciseCard = () => {
   const [isMuscleEditing, setIsMuscleEditing] = useState(false);
 
-  const { muscles, handleDeleteMuscle, handleAddExercise, handleToggleMuscle } =
+  const { muscles, handleDeleteMuscle, handleAddExercise, showOrHide } =
     useMuscleContext();
 
   return (
@@ -24,6 +24,9 @@ export const ExerciseCard = () => {
               onClick={() => handleAddExercise(muscle.newID)}
             >
               <FontAwesomeIcon icon={faDumbbell} />
+            </button>
+            <button onClick={() => showOrHide(muscle.newID)}>
+              <FontAwesomeIcon icon={faEye} />
             </button>
 
             <MuscleTitle

@@ -3,7 +3,8 @@ import { Sets } from "../Sets/Sets";
 export const MySets = ({
   exercise,
   muscleId,
-  isEditing,
+  isSetEditing,
+  setIsSetEditing,
   exerciseId,
   updateSet,
 }) => {
@@ -13,7 +14,8 @@ export const MySets = ({
         <Sets
           key={set.id}
           set={set}
-          isEditing={isEditing}
+          isSetEditing={isSetEditing}
+          setIsSetEditing={setIsSetEditing}
           muscleId={muscleId}
           exerciseId={exerciseId}
           updateSet={updateSet}

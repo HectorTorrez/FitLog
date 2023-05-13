@@ -20,7 +20,6 @@ export const MuscleContext = createContext();
 
 export const MuscleProvider = ({ children }) => {
   const [muscles, setMuscles] = useState(() => []);
-  const [toggle, setToggle] = useState(false);
 
   const [addMuscleError, setAddMuscleError] = useState(null);
   const muscleRef = collection(db, "muscles1");
@@ -107,6 +106,7 @@ export const MuscleProvider = ({ children }) => {
     const unsuscribe = onSnapshot(queryMuscles, (snapshot) => {
       const firestoreMuscles = [];
       snapshot.forEach((doc) => {
+        if (doc.data().user !== auth.currentUser.uid) return;
         firestoreMuscles.push({ ...doc.data(), newID: doc.id });
       });
 

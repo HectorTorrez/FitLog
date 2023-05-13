@@ -1,9 +1,20 @@
 import { Fragment, useState } from "react";
 import { useMuscleContext } from "../../hooks/useMuscleContext";
-import { faFloppyDisk, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFloppyDisk,
+  faPenToSquare,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export const Sets = ({ set, isEditing, muscleId, exerciseId, updateSet }) => {
+export const Sets = ({
+  set,
+  muscleId,
+  exerciseId,
+  updateSet,
+  isSetEditing,
+  setIsSetEditing,
+}) => {
   const [inputSet, setInputSet] = useState(set.set);
   const [inputWeight, setInputWeight] = useState(set.weight);
   const [setId, setSetId] = useState(set.id);
@@ -14,9 +25,18 @@ export const Sets = ({ set, isEditing, muscleId, exerciseId, updateSet }) => {
   };
 
   let setContent;
-  if (isEditing) {
+  if (isSetEditing) {
     setContent = (
-      <section key={set.id} className="grid grid-cols-3 items-end ">
+      <section
+        key={set.id}
+        className="grid grid-flow-col lg:grid-cols-4 items-end "
+      >
+        <button
+          className="text-yellow-600 font-bold py-1 px-1 rounded   "
+          onClick={() => setIsSetEditing(false)}
+        >
+          <FontAwesomeIcon icon={faPenToSquare} />
+        </button>
         <label htmlFor="set">
           <p className="text-base font-bold">Set</p>
 
@@ -61,7 +81,13 @@ export const Sets = ({ set, isEditing, muscleId, exerciseId, updateSet }) => {
   } else {
     setContent = (
       <Fragment key={set.id}>
-        <section className=" flex  gap-3 p-3  w-40 ">
+        <section className=" flex  lg:grid-cols-2 items-center   ">
+          <button
+            className="text-yellow-600 font-bold py-1 px-1 rounded   "
+            onClick={() => setIsSetEditing(true)}
+          >
+            <FontAwesomeIcon icon={faPenToSquare} />
+          </button>
           <p className="text-base font-bold w-40  ">
             Set <span className="block font-normal ">{set.set}</span>
           </p>

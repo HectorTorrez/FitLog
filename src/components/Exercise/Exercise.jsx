@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { useMuscleContext } from "../../hooks/useMuscleContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -13,6 +13,7 @@ import { db } from "../../firebase";
 
 export const Exercise = ({ exercise, muscleId, updateExercise }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [isSetEditing, setIsSetEditing] = useState(false);
   const [inputExercise, setInputExercise] = useState(exercise.exercise);
   const [sets, setSets] = useState(exercise.sets);
   const [reps, setReps] = useState(exercise.reps);
@@ -30,16 +31,7 @@ export const Exercise = ({ exercise, muscleId, updateExercise }) => {
     setIsEditing(false);
   };
 
-  const updateSet = async (newSet, exerciseId) => {
-    // const updateSet = exercise.mySets.map((set) => {
-    //   if (set.id === newSet.setId) {
-    //     return newObjet;
-    //   }
-    //   return set;
-    // });
-
-    //TODO: fix update set
-
+  const updateSet = async (newSet) => {
     try {
       const newObjet = {
         id: newSet.setId,
@@ -49,8 +41,9 @@ export const Exercise = ({ exercise, muscleId, updateExercise }) => {
       const musclesRef = doc(db, "muscles1", muscleId);
       const snapshot = await getDoc(musclesRef);
       const muscle = snapshot.data();
+
       const exercises = muscle.exercises.map((ex) => {
-        if (ex.id === exerciseId) {
+        if (ex.id === newSet.exerciseId) {
           const mySets = ex.mySets.map((set) => {
             if (set.id === newSet.setId) {
               return newObjet;
@@ -63,8 +56,9 @@ export const Exercise = ({ exercise, muscleId, updateExercise }) => {
           return ex;
         }
       });
-      console.log(exercises);
+
       await updateDoc(musclesRef, { exercises });
+      setIsSetEditing(false);
     } catch (error) {
       console.log(error);
     }
@@ -145,7 +139,8 @@ export const Exercise = ({ exercise, muscleId, updateExercise }) => {
               muscleId={muscleId}
               exercise={exercise.mySets}
               exerciseId={exercise.id}
-              isEditing={isEditing}
+              isSetEditing={isSetEditing}
+              setIsSetEditing={setIsSetEditing}
               updateSet={updateSet}
             />
           </div>
@@ -197,6 +192,8 @@ export const Exercise = ({ exercise, muscleId, updateExercise }) => {
               muscleId={muscleId}
               exercise={exercise.mySets}
               exerciseId={exercise.id}
+              isSetEditing={isSetEditing}
+              setIsSetEditing={setIsSetEditing}
               updateSet={updateSet}
             />
           </div>
