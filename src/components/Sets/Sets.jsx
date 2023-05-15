@@ -6,6 +6,7 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FormSet } from "../FormSets/FormSet";
 
 export const Sets = ({
   set,
@@ -37,30 +38,13 @@ export const Sets = ({
         >
           <FontAwesomeIcon icon={faPenToSquare} />
         </button>
-        <label htmlFor="set">
-          <p className="text-base font-bold">Set</p>
-
-          <input
-            className="w-8 shadow appearance-none border rounded p-1
-            text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            type="text"
-            value={inputSet}
-            name={set.id}
-            onChange={(e) => setInputSet(e.target.value)}
-          />
-        </label>
-        <label htmlFor="weight">
-          <p className="text-base font-bold">Weight</p>
-
-          <input
-            className="w-16 shadow appearance-none border rounded p-1
-            text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            type="text"
-            value={inputWeight}
-            name={set.id}
-            onChange={(e) => setInputWeight(e.target.value)}
-          />
-        </label>
+        <FormSet
+          set={set}
+          setInputSet={setInputSet}
+          inputSet={inputSet}
+          inputWeight={inputWeight}
+          setInputWeight={setInputWeight}
+        />
         <div>
           <button
             className=" text-blue-500 font-bold py-1 px-1 rounded focus:outline-none focus:shadow-outline "

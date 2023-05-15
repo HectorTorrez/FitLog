@@ -2,14 +2,18 @@ import { useState } from "react";
 import { ExerciseForm } from "../ExerciseForm/ExerciseForm";
 import { useMuscleContext } from "../../hooks/useMuscleContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDumbbell, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faDumbbell,
+  faEye,
+  faEyeSlash,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { MuscleTitle } from "../MuscleTitle/MuscleTitle";
 
 export const ExerciseCard = () => {
   const [isMuscleEditing, setIsMuscleEditing] = useState(false);
 
-  const { muscles, handleDeleteMuscle, handleAddExercise, showOrHide } =
-    useMuscleContext();
+  const { muscles, handleDeleteMuscle, handleAddExercise } = useMuscleContext();
 
   return (
     <section className=" flex flex-col gap-3 items-center max-w-6xl m-auto    md:grid grid-cols-2   ">
@@ -25,9 +29,15 @@ export const ExerciseCard = () => {
             >
               <FontAwesomeIcon icon={faDumbbell} />
             </button>
-            <button onClick={() => showOrHide(muscle.newID)}>
-              <FontAwesomeIcon icon={faEye} />
-            </button>
+            {/* {isExerciseHidden ? (
+              <button onClick={() => showOrHide(muscle.newID)}>
+                <FontAwesomeIcon icon={faEye} />
+              </button>
+            ) : (
+              <button onClick={() => toggleHidden()}>
+                <FontAwesomeIcon icon={faEyeSlash} />
+              </button>
+            )} */}
 
             <MuscleTitle
               key={muscle.id}

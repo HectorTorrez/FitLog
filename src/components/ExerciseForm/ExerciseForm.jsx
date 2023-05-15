@@ -2,7 +2,12 @@ import { Exercise } from "../Exercise/Exercise";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 
-export const ExerciseForm = ({ exercises, muscleId }) => {
+export const ExerciseForm = ({
+  exercises,
+  muscleId,
+  showOrHidden,
+  cardVisibility,
+}) => {
   const updateExercise = async (newExercise) => {
     const updateExercise = exercises.map((m) => {
       if (m.id === newExercise.id) {
@@ -30,6 +35,8 @@ export const ExerciseForm = ({ exercises, muscleId }) => {
           muscleId={muscleId}
           exercises={exercises}
           updateExercise={updateExercise}
+          showOrHidden={showOrHidden}
+          cardVisibility={cardVisibility}
         />
       ))}
     </>

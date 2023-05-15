@@ -5,8 +5,7 @@ import { Alert, AlertTitle } from "@mui/material";
 export const AddMuscle = () => {
   const [muscleInput, setMuscleInput] = useState("");
 
-  const { handleAddMuscle, handleClearMuscle, addMuscleError } =
-    useMuscleContext();
+  const { handleAddMuscle, addMuscleError } = useMuscleContext();
 
   const handleDown = async (event) => {
     if (event.key === "Enter") {
@@ -52,13 +51,6 @@ export const AddMuscle = () => {
         onClick={handleClick}
       >
         Add Muscle
-      </button>
-
-      <button
-        onClick={handleClearMuscle}
-        className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-      >
-        Clear
       </button>
     </section>
   );
